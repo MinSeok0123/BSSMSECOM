@@ -15,9 +15,9 @@ $row = mysqli_fetch_assoc($result);
         <span class="name">기숙사 상태</span>
         <?php
         echo '<div class="summary">';
-        echo "<span> 습도 : " . $row['humidity'] . " °C</span>";
+        echo "<span> 온도 : " . $row['temperature'] . " °C</span>";
         echo "&nbsp&nbsp";
-        echo "<span> 온도 : " . $row['temperature'] . " %</span>";
+        echo "<span> 습도 : " . $row['humidity'] . " %</span>";
         echo "</div>";
         ?>
       </div>
