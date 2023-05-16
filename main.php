@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="css/main.css">
 <html lang="ko">
 <head>
     <title>메인페이지</title>
@@ -9,6 +10,11 @@
     include 'header.php';
     ?>
 </header>
+<div>
+    <?php
+    include 'components/nav.php';
+    ?>
+</div>
 <footer>
     <?php
     include 'footer.php';

@@ -1,13 +1,13 @@
 <link rel="stylesheet" href="css/nav.css" />
 <div class="navbody">
   <div class="space">
-    <a class="a" href="status.php">
+    <a class="sa" href="status.php">
       <div class="clickbox"></div>
     </a>
-    <a class="a" href="manage.php">
+    <a class="sa" href="manage.php">
       <div class="clickbox"></div>
     </a>
-    <a class="a" href="control.php">
+    <a class="sa" href="control.php">
       <div class="clickbox"></div>
     </a>
   </div>
