@@ -32,6 +32,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
+  text-decoration: none;
 }
 
 .clickbox {
@@ -43,6 +44,11 @@
   transition: 0.3s box-shadow;
   transform: translateY(0);
   transition: transform 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
 }
 
 @media (max-width: 1024px) {
@@ -50,6 +56,18 @@
     width: calc(100% - 80px);
     height: calc(100% - 80px);
   }
+}
+
+.vector {
+  width: 100px;
+  height: 100px;
+}
+
+.name {
+  text-decoration: none;
+  color: black;
+  font-size: 22px;
+  font-weight: 500;
 }
 
 .clickbox:hover {
