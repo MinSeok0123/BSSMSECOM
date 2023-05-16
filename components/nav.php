@@ -14,8 +14,11 @@ $row = mysqli_fetch_assoc($result);
         <img class="vector" src="img/Vector.png"></img>
         <span class="name">기숙사 상태</span>
         <?php
-        echo "<span> 습도 : " . $row['humidity'] . "</span>";
-        echo "<span> 온도 : " . $row['temperature'] . "</span>";
+        echo '<div class="summary">';
+        echo "<span> 습도 : " . $row['humidity'] . " °C</span>";
+        echo "&nbsp&nbsp";
+        echo "<span> 온도 : " . $row['temperature'] . " %</span>";
+        echo "</div>";
         ?>
       </div>
     </a>
@@ -24,11 +27,13 @@ $row = mysqli_fetch_assoc($result);
         <img class="vector" src="img/Vector-1.png"></img>
         <span class="name">출입자 관리</span>
         <?php
+        echo '<div class="summary">';
         if ($row['motion'] == 0) {
-          echo "<span>침입안함</span>";
+          echo '<span style="color: #0984E3">침입안함</span>';
         } elseif ($row['motion'] == 1) {
-          echo "<span>침입함</span>";
+          echo '<span style="color: #EB2F06">침입함</span>';
         }
+        echo "</div>";
         ?>
       </div>
     </a>
@@ -37,11 +42,13 @@ $row = mysqli_fetch_assoc($result);
         <img class="vector" src="img/Vector-2.png"></img>
         <span class="name">원격제어</span>
         <?php
+        echo '<div class="summary">';
         if ($row['click'] == 1) {
          echo "<span>최근 : " . $row['rt'] . "</span>";
         } else {
         echo "<span>최근 요청이 없습니다.</span>";
       }
+      echo "</div>";
 ?>
       </div>
     </a>
