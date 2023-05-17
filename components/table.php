@@ -15,6 +15,7 @@ $result = mysqli_query($conn, $query);
 ?>
 
 <link rel="stylesheet" href="css/table.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="tablebox">
     <table>
         <caption>출입자 관리</caption>
@@ -27,7 +28,7 @@ $result = mysqli_query($conn, $query);
                 <th>삭제</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="table-body">
             <?php
             while ($row = mysqli_fetch_assoc($result)) {
                 echo "<tr>";
@@ -52,3 +53,17 @@ $result = mysqli_query($conn, $query);
         </tfoot>
     </table>
 </div>
+
+<script>
+$(document).ready(function() {
+    setInterval(function() {
+        $.ajax({
+            url: 'fetch.php', // 데이터를 가져올 PHP 파일 경로
+            type: 'POST',
+            success: function(data) {
+                $('#table-body').html(data); // 테이블의 내용을 업데이트
+            }
+        });
+    }, 1000); // 1초마다 데이터를 업데이트
+});
+</script>
