@@ -13,7 +13,6 @@ $result = mysqli_query($conn, $query);
 </head>
 <body>
     <canvas id="myChart"></canvas>
-    
     <script>
     var temperatureData = [];
     var humidityData = [];

@@ -48,9 +48,16 @@ $row = mysqli_fetch_assoc($result);
     <div class="graph">
     <span class="tit">Graph</span>
     <div class="graphwrap">
+    <div>
         <?php
-        include 'graph1.php';
+        include 'graph.php';
         ?>
+        </div>
+        <div>
+        <?php
+        include 'chart.php';
+        ?>
+        </div>
     </div>
     </div>
     </div>
