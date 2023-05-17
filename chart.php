@@ -13,17 +13,28 @@ $row = mysqli_fetch_assoc($result);
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<div style="width:700px; justify-content: space-between; align-items: center; display:flex;">
-<div style="position:relative;width:150px; height:150px;">
+<div style="width:85%; justify-content: space-between; align-items: center; display:flex;">
+<div style="position:relative;width:280px; height:170px; box-shadow: 0px 11px 30px rgba(0, 0, 0, 0.25); border-radius:10px;">
+<div style="width:120px; margin:8px;">
     <canvas id="temperatureChart"></canvas>
-    <div id="cap" style="position:absolute;top:60px;left:0px;text-align:center;width:100%;font-size:30px;font-family:Arial, sans-serif;">
+</div>
+<div style="position:absolute; right:0; width:120px; height:80%; top:0; display:flex; justify-content: space-around; flex-direction: column;">
+<span>온도</span>
+<?php echo $row['temperature']; ?>°C
+</div>
+    <div id="cap" style="position:absolute;top:55px;left:47px;text-align:center;font-size:20px;font-family:Arial, sans-serif;">
 	<?php echo $row['temperature']; ?>°C
 	</div>
 </div>
-
-<div style="position:relative;width:150px; height:150px;">
+<div style="position:relative;width:280px; height:170px; box-shadow: 0px 11px 30px rgba(0, 0, 0, 0.25); border-radius:10px;">
+<div style="width:120px; margin:8px;">
     <canvas id="humidityChart"></canvas>
-    <div id="cap" style="position:absolute;top:60px;left:0px;text-align:center;width:100%;font-size:30px;font-family:Arial, sans-serif;">
+</div>
+<div style="position:absolute; right:0; width:120px; height:80%; top:0; display:flex; justify-content: space-around; flex-direction: column;">
+<span>습도</span>
+<?php echo $row['humidity']; ?>%
+</div>
+    <div id="cap" style="position:absolute;top:55px;left:47px;text-align:center;font-size:20px;font-family:Arial, sans-serif;">
 	<?php echo $row['humidity']; ?>%
 	</div>
 </div>
