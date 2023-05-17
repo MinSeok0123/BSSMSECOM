@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="css/manage.css">
+<link rel="stylesheet" href="css/main.css">
 <html lang="ko">
 <head>
     <title>출입자 관리</title>
