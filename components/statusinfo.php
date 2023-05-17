@@ -46,10 +46,10 @@ $row = mysqli_fetch_assoc($result);
             <div class="graphwrap">
                 <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%;">
                     <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 60%">
-                        <?php include 'graph.php'; ?>
+                        <?php include 'components/graph.php'; ?>
                     </div>
                     <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 40%">
-                        <?php include 'chart.php'; ?>
+                        <?php include 'components/chart.php'; ?>
                     </div>
                 </div>
             </div>
