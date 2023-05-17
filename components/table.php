@@ -2,7 +2,8 @@
 include 'db.php';
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
 
-// Check if delete button is clicked
+$recentUpdate = '';
+
 if (isset($_GET['delete_id'])) {
     $deleteId = $_GET['delete_id'];
     $deleteQuery = "DELETE FROM tbl WHERE id = $deleteId";
@@ -12,6 +13,22 @@ if (isset($_GET['delete_id'])) {
 
 $query = "SELECT * FROM tbl ORDER BY id ASC LIMIT 7;";
 $result = mysqli_query($conn, $query);
+
+$query = "SELECT * FROM tbl ORDER BY id DESC LIMIT 1;";
+$result_recent = mysqli_query($conn, $query);
+if ($row = mysqli_fetch_assoc($result_recent)) {
+    $rtTimestamp = strtotime($row['rt']);
+    $currentTimestamp = time();
+    $timeDiff = $currentTimestamp - $rtTimestamp;
+
+    if ($timeDiff < 60) {
+        $recentUpdate = $timeDiff . '초 전';
+    } elseif ($timeDiff < 3600) {
+        $recentUpdate = floor($timeDiff / 60) . '분 전';
+    } else {
+        $recentUpdate = floor($timeDiff / 3600) . '시간 전';
+    }
+}
 ?>
 
 <link rel="stylesheet" href="css/table.css">
@@ -19,6 +36,7 @@ $result = mysqli_query($conn, $query);
 <div class="tablebox">
     <table>
         <caption>출입자 관리</caption>
+        <span id="recent-update">최근 업데이트: <?php echo $recentUpdate; ?></span>
         <thead>
             <tr>
                 <th>번호</th>
@@ -40,7 +58,7 @@ $result = mysqli_query($conn, $query);
                 $endTime = strtotime('20:30');
                 $inWorkHours = $row['motion'] == 1 && $rtTime >= $startTime && $rtTime <= $endTime;
                 echo "<td>".($inWorkHours ? 'O' : 'X')."</td>";
-                
+
                 echo "<td>";
                 echo '<a style="text-decoration: none;" href="?delete_id='.$row['id'].'" onclick="return confirm(\'정말로 삭제 하시겠습니까?\');" class="delete">삭제</a>';
                 echo "</td>";
@@ -62,6 +80,15 @@ $(document).ready(function() {
             type: 'POST',
             success: function(data) {
                 $('#table-body').html(data); // 테이블의 내용을 업데이트
+            }
+        });
+
+        // 업데이트된 최근 업데이트 시간 가져오기
+        $.ajax({
+            url: 'get_recent_update.php', // 최근 업데이트 시간을 가져올 PHP 파일 경로
+            type: 'POST',
+            success: function(data) {
+                $('#recent-update').text('최근 업데이트: ' + data); // 최근 업데이트 시간 업데이트
             }
         });
     }, 1000); // 1초마다 데이터를 업데이트
