@@ -5,6 +5,7 @@ $query = "SELECT * FROM tbl ORDER BY rt ASC LIMIT 7;";
 $result = mysqli_query($conn, $query);
 ?>
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,10 +21,11 @@ $result = mysqli_query($conn, $query);
 
     <?php
     while ($row = mysqli_fetch_assoc($result)) {
-        echo "temperatureData.push(" . $row['temperature'] . ");";
-        echo "humidityData.push(" . $row['humidity'] . ");";
-        echo "timeData.push('" . $row['rt'] . "');";
-    }
+    $formattedTime = date("g시 i분 s초", strtotime($row['rt']));
+    echo "temperatureData.push(" . $row['temperature'] . ");";
+    echo "humidityData.push(" . $row['humidity'] . ");";
+    echo "timeData.push('" . $formattedTime . "');";
+}
     ?>
 
     var ctx = document.getElementById('myChart').getContext('2d');
