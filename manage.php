@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="css/manage.css">
+<html lang="ko">
+<head>
+    <title>출입자 관리</title>
+</head>
+<body style="margin:0px;">
+<header>
+<?php
+    include 'header.php';
+    ?>
+</header>
+<div>
+<?php
+    include 'components/table.php';
+    ?>
+</div>
+<footer>
+    <?php
+    include 'footer.php';
+    ?>
+</footer>
+</body>
+</html>
