@@ -1,7 +1,7 @@
 <?php
 include 'db.php';
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
-$query = "SELECT * FROM tbl ORDER BY rt DESC LIMIT 1;";
+$query = "SELECT * FROM tbl ORDER BY rt DESC LIMIT 7;";
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
 ?>
@@ -47,7 +47,11 @@ $row = mysqli_fetch_assoc($result);
         </div>
     <div class="graph">
     <span class="tit">Graph</span>
-    <div class="graphwrap"></div>
+    <div class="graphwrap">
+        <?php
+        include 'graph1.php';
+        ?>
+    </div>
     </div>
     </div>
 
