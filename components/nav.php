@@ -10,47 +10,78 @@ $row = mysqli_fetch_assoc($result);
 <div class="navbody">
   <div class="space">
     <a class="sa" href="status.php">
-      <div class="clickbox">
+      <div class="clickbox" id="status">
         <img class="vector" src="img/Vector.png"></img>
         <span class="name">기숙사 상태</span>
-        <?php
-        echo '<div class="summary">';
-        echo "<span> 온도 : " . $row['temperature'] . " °C</span>";
-        echo "&nbsp&nbsp";
-        echo "<span> 습도 : " . $row['humidity'] . " %</span>";
-        echo "</div>";
-        ?>
+        <div class="summary">
+          <span id="temperature">온도: <?php echo $row['temperature']; ?> °C</span>
+          &nbsp&nbsp
+          <span id="humidity">습도: <?php echo $row['humidity']; ?> %</span>
+        </div>
       </div>
     </a>
     <a class="sa" href="manage.php">
-      <div class="clickbox">
+      <div class="clickbox" id="manage">
         <img class="vector" src="img/Vector-1.png"></img>
         <span class="name">출입자 관리</span>
-        <?php
-        echo '<div class="summary">';
-        if ($row['motion'] == 0) {
-          echo '<span style="color: #0984E3">침입안함</span>';
-        } elseif ($row['motion'] == 1) {
-          echo '<span style="color: #EB2F06">침입함</span>';
-        }
-        echo "</div>";
-        ?>
+        <div class="summary">
+          <span id="motion">
+            <?php
+            if ($row['motion'] == 0) {
+              echo '<span style="color: #0984E3">침입안함</span>';
+            } elseif ($row['motion'] == 1) {
+              echo '<span style="color: #EB2F06">침입함</span>';
+            }
+            ?>
+          </span>
+        </div>
       </div>
     </a>
     <a class="sa" href="control.php">
-      <div class="clickbox">
+      <div class="clickbox" id="control">
         <img class="vector" src="img/Vector-2.png"></img>
         <span class="name">원격제어</span>
-        <?php
-        echo '<div class="summary">';
-        if ($row['click'] == 1) {
-         echo "<span>최근 : " . $row['rt'] . "</span>";
-        } else {
-        echo "<span>최근 요청이 없습니다.</span>";
-      }
-      echo "</div>";
-?>
+        <div class="summary">
+          <span id="click">
+            <?php
+            if ($row['click'] == 1) {
+              echo "최근: " . $row['rt'];
+            } else {
+              echo "최근 요청이 없습니다.";
+            }
+            ?>
+          </span>
+        </div>
       </div>
     </a>
   </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function refreshData() {
+    $.ajax({
+      url: "refresh.php",
+      dataType: "json",
+      success: function(data) {
+        $("#temperature").text("온도: " + data.temperature + " °C");
+        $("#humidity").text("습도: " + data.humidity + " %");
+        if (data.motion == 0) {
+          $("#motion").html('<span style="color: #0984E3">침입안함</span>');
+        } else if (data.motion == 1) {
+          $("#motion").html('<span style="color: #EB2F06">침입함</span>');
+        }
+        if (data.click == 1) {
+          $("#click").text("최근: " + data.rt);
+        } else {
+          $("#click").text("최근 요청이 없습니다.");
+        }
+      },
+      error: function() {
+        console.log("데이터 로딩에 실패했습니다.");
+      }
+    });
+  }
+
+  setInterval(refreshData, 1000);
+</script>
