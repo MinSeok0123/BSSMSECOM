@@ -282,7 +282,17 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                 var startTime = startTimeInput.value;
                 var endTime = endTimeInput.value;
 
+                if (!/^([01]\d|2[0-3]):([0-5]\d)$/.test(startTime)) {
+                    alert("등교시간을 올바른 형식으로 입력하세요 (예: 09:00).");
+                    startTimeInput.focus();
+                    return;
+                }
 
+                if (!/^([01]\d|2[0-3]):([0-5]\d)$/.test(endTime)) {
+                    alert("하교시간을 올바른 형식으로 입력하세요 (예: 18:30).");
+                    endTimeInput.focus();
+                    return;
+                }
 
                 if (startTime.trim() === "") {
                 alert("등교시간이 비어있습니다.");
