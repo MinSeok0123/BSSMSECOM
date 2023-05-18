@@ -101,16 +101,25 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                     ?>
                 </tbody>
                 <tfoot>
+                    
                     <td colspan="5" class="tablefoot">
+                    <div style="display: flex; width: 100%; height: 30px; justify-content: center; align-items: center;">
                         <?php if ($page > 1) : ?>
-                            <a href="?page=<?php echo $page - 1; ?>">이전</a>
+                            <div style="width:30px;height:30px; display:flex; justify-content: center; align-items: center; text-align:center;">
+                            <a style="text-decoration: none; color:black;" href="?page=<?php echo $page - 1; ?>"><</a>
+                            </div>
                         <?php endif; ?>
                         <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-                            <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                            <div style="width:30px;height:30px; margin:5px; background-color:#03a9f4; border-radius:3px; display:flex; justify-content: center; align-items: center; text-align:center;">
+                            <a style="text-decoration: none; color: white;" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                            </div>
                         <?php endfor; ?>
                         <?php if ($page < $totalPages) : ?>
-                            <a href="?page=<?php echo $page + 1; ?>">다음</a>
+                            <div style="width:30px;height:30px; display:flex; justify-content: center; align-items: center; text-align:center;">
+                            <a style="text-decoration: none; color:black;" href="?page=<?php echo $page + 1; ?>">></a>
+                            </div>
                         <?php endif; ?>
+                        </div>
                     </td>
                 </tfoot>
             </table>
