@@ -9,7 +9,6 @@ if (isset($_POST['start']) && isset($_POST['end'])) {
     $updateQuery = "UPDATE time SET start = '$startTime', end = '$endTime' LIMIT 1";
     mysqli_query($conn, $updateQuery);
 
-    // Return a response if needed
     echo "일과 시간이 성공적으로 업데이트되었습니다.";
 }
 ?>

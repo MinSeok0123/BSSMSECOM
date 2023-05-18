@@ -14,11 +14,13 @@ if (isset($_GET['delete_id'])) {
 $query = "SELECT * FROM tbl ORDER BY id DESC LIMIT 7;";
 $result = mysqli_query($conn, $query);
 
-$query = "SELECT * FROM tbl ORDER BY id ASC LIMIT 1;";
+date_default_timezone_set('Asia/Seoul');
+
+$query = "SELECT * FROM tbl ORDER BY id DESC LIMIT 1;";
 $result_recent = mysqli_query($conn, $query);
 if ($row = mysqli_fetch_assoc($result_recent)) {
     $rtTimestamp = strtotime($row['rt']);
-    $currentTimestamp = time();
+    $currentTimestamp = strtotime(date_default_timezone_get());
     $timeDiff = $currentTimestamp - $rtTimestamp;
 
     if ($timeDiff < 60) {
@@ -63,11 +65,20 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
         }
 
         .modal-content {
+            position: relative;
             background-color: #fefefe;
-            margin: 10% auto;
+            margin: 12% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 60%;
+            width: 400px;
+            height: 400px;
+            border-radius: 20px;
+        }
+
+        @media (max-width: 1024px) {
+        .modal-content {
+            margin: 30vh auto;
+        }
         }
 
         .close {
@@ -83,6 +94,88 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
             color: black;
             text-decoration: none;
             cursor: pointer;
+        }
+
+        .time {
+            position: absolute;
+            top:30px;
+            left:30px;
+        }
+
+        .timetext{
+            font-size:25px;
+            font-weight: 500;
+        }
+
+        .시간{
+            font-size:18px;
+            font-weight:300;
+            color:gray;
+        }
+
+        .inputwrap{
+            position: relative;
+            width:100%;
+            height:100px;
+        }
+
+        .label{
+            left:12px;
+            top:-18px;
+            position: absolute;
+            font-size:13px;
+        }
+
+        .clicklabel{
+            color:blue;
+        }
+
+        .input{
+            padding:10px;
+            font-size: 20px;
+            width:300px;
+            height:30px;
+            border-radius:15px;
+        }
+
+        .form {
+            position: absolute;
+            top:130px;
+            width:100%;
+            left:0;
+            height:auto;
+        }
+
+        .formwrap{
+            padding:30px;
+            height:130px;
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .submitwrap{
+            left:0;
+            position: absolute;
+            bottom:20px;
+            height:auto;
+            width:100%;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .submit {
+            cursor: pointer;
+            width:75%;
+            height:50px;
+            background-color:black;
+            border:none;
+            color:white;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -131,15 +224,26 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h3>일과 시간 수정</h3>
+            <div class="time">
+            <span class="timetext">🏫 일과시간</span>
+            </div>
+            <div class="form">
+            <div class="formwrap">
             <form id="work-hours-form">
-        <label for="start-time">등교 시간:</label>
-        <input type="text" id="start-time" name="start-time" value="<?php echo $startTime; ?>">
-
-        <label for="end-time">하교 시간:</label>
-        <input type="text" id="end-time" name="end-time" value="<?php echo $endTime; ?>">
-
-        <input type="submit" value="저장">
+        <div class="inputwrap
+        ">
+        <label class="label">등교시간</label>
+        <input class="input" placeholder="등교시간" type="text" id="start-time" name="start-time" value="<?php echo $startTime; ?>">
+        </div>
+        <div class="inputwrap">
+        <label class="label">하교시간</label>
+        <input class="input" placeholder="하교시간" type="text" id="end-time" name="end-time" value="<?php echo $endTime; ?>">
+        </div>
+        </div>
+        </div>
+        <div class="submitwrap">
+        <input class="submit" type="submit" value="저장">
+        </div>
     </form>
         </div>
     </div>
@@ -164,6 +268,7 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                     modal.style.display = "none";
                 }
             });
+            
             //////////////////////////
 
             var form = document.getElementById("work-hours-form");
@@ -177,6 +282,21 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                 var startTime = startTimeInput.value;
                 var endTime = endTimeInput.value;
 
+
+
+                if (startTime.trim() === "") {
+                alert("등교시간이 비어있습니다.");
+                startTimeInput.focus();
+                return;
+                }
+
+                if (endTime.trim() === "") {
+                alert("하교시간이 비어있습니다.");
+                endTimeInput.focus();
+                return;
+                }
+                
+
                 $.ajax({
                     url: 'update_hours.php',
                     type: 'POST',
@@ -185,8 +305,8 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                         end: endTime
                     },
                     success: function(response) {
-                        // Handle the response if needed
                         console.log(response);
+                        alert(response);
                         modal.style.display = "none";
                     }
                 });
