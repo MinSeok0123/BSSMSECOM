@@ -2,7 +2,11 @@
 include 'db.php';
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
 
-$query = "SELECT * FROM tbl ORDER BY id DESC LIMIT 7;";
+$page = isset($_POST['page']) ? $_POST['page'] : 1;
+$limit = 7;
+$offset = ($page - 1) * $limit;
+
+$query = "SELECT * FROM tbl ORDER BY id DESC LIMIT $offset, $limit;";
 $result = mysqli_query($conn, $query);
 
 $query = "SELECT * FROM time LIMIT 1;";

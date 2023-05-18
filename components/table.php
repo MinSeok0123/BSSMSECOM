@@ -11,8 +11,17 @@ if (isset($_GET['delete_id'])) {
     echo "<script>alert('삭제가 성공적으로 처리되었습니다.');</script>";
 }
 
-$query = "SELECT * FROM tbl ORDER BY id DESC LIMIT 7;";
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$recordsPerPage = 7;
+$offset = ($page - 1) * $recordsPerPage;
+
+$query = "SELECT * FROM tbl ORDER BY id DESC LIMIT $offset, $recordsPerPage;";
 $result = mysqli_query($conn, $query);
+
+$totalRowsQuery = "SELECT COUNT(*) as total FROM tbl";
+$totalRowsResult = mysqli_query($conn, $totalRowsQuery);
+$totalRows = mysqli_fetch_assoc($totalRowsResult)['total'];
+$totalPages = ceil($totalRows / $recordsPerPage);
 
 date_default_timezone_set('Asia/Seoul');
 
@@ -31,7 +40,6 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
         $recentUpdate = floor($timeDiff / 3600) . '시간 전';
     }
 }
-
 
 $query = "SELECT * FROM time LIMIT 1;";
 $result_time = mysqli_query($conn, $query);
@@ -52,131 +60,9 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
     <title>출입자 관리</title>
     <link rel="stylesheet" href="css/table.css">
     <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            position: relative;
-            background-color: #fefefe;
-            margin: 12% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 400px;
-            height: 400px;
-            border-radius: 20px;
-        }
-
-        @media (max-width: 1024px) {
-        .modal-content {
-            margin: 30vh auto;
-        }
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .time {
-            position: absolute;
-            top:30px;
-            left:30px;
-        }
-
-        .timetext{
-            font-size:25px;
-            font-weight: 500;
-        }
-
-        .시간{
-            font-size:18px;
-            font-weight:300;
-            color:gray;
-        }
-
-        .inputwrap{
-            position: relative;
-            width:100%;
-            height:100px;
-        }
-
-        .label{
-            left:12px;
-            top:-18px;
-            position: absolute;
-            font-size:13px;
-        }
-
-        .clicklabel{
-            color:blue;
-        }
-
-        .input{
-            padding:10px;
-            font-size: 20px;
-            width:300px;
-            height:30px;
-            border-radius:15px;
-        }
-
-        .form {
-            position: absolute;
-            top:130px;
-            width:100%;
-            left:0;
-            height:auto;
-        }
-
-        .formwrap{
-            padding:30px;
-            height:130px;
-            display:flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .submitwrap{
-            left:0;
-            position: absolute;
-            bottom:20px;
-            height:auto;
-            width:100%;
-            display:flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .submit {
-            cursor: pointer;
-            width:75%;
-            height:50px;
-            background-color:black;
-            border:none;
-            color:white;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-        }
+        <?php
+        include 'tablestyle.php';
+        ?>
     </style>
 </head>
 
@@ -215,7 +101,17 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                     ?>
                 </tbody>
                 <tfoot>
-                    <td colspan="5" class="tablefoot"></td>
+                    <td colspan="5" class="tablefoot">
+                        <?php if ($page > 1) : ?>
+                            <a href="?page=<?php echo $page - 1; ?>">이전</a>
+                        <?php endif; ?>
+                        <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                            <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        <?php endfor; ?>
+                        <?php if ($page < $totalPages) : ?>
+                            <a href="?page=<?php echo $page + 1; ?>">다음</a>
+                        <?php endif; ?>
+                    </td>
                 </tfoot>
             </table>
         </div>
@@ -225,26 +121,25 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
         <div class="modal-content">
             <span class="close">&times;</span>
             <div class="time">
-            <span class="timetext">🏫 일과시간</span>
+                <span class="timetext">🏫 일과시간</span>
             </div>
             <div class="form">
-            <div class="formwrap">
-            <form id="work-hours-form">
-        <div class="inputwrap
-        ">
-        <label class="label">등교시간</label>
-        <input class="input" placeholder="등교시간" type="text" id="start-time" name="start-time" value="<?php echo $startTime; ?>">
-        </div>
-        <div class="inputwrap">
-        <label class="label">하교시간</label>
-        <input class="input" placeholder="하교시간" type="text" id="end-time" name="end-time" value="<?php echo $endTime; ?>">
-        </div>
-        </div>
-        </div>
-        <div class="submitwrap">
-        <input class="submit" type="submit" value="저장">
-        </div>
-    </form>
+                <div class="formwrap">
+                    <form id="work-hours-form">
+                        <div class="inputwrap">
+                            <label class="label">등교시간</label>
+                            <input class="input" placeholder="등교시간" type="time" id="start-time" name="start-time" value="<?php echo $startTime; ?>">
+                        </div>
+                        <div class="inputwrap">
+                            <label class="label">하교시간</label>
+                            <input class="input" placeholder="하교시간" type="time" id="end-time" name="end-time" value="<?php echo $endTime; ?>">
+                        </div>
+                </div>
+            </div>
+            <div class="submitwrap">
+                <input class="submit" type="submit" value="저장">
+            </div>
+            </form>
         </div>
     </div>
 
@@ -268,7 +163,7 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                     modal.style.display = "none";
                 }
             });
-            
+
             //////////////////////////
 
             var form = document.getElementById("work-hours-form");
@@ -295,17 +190,17 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                 }
 
                 if (startTime.trim() === "") {
-                alert("등교시간이 비어있습니다.");
-                startTimeInput.focus();
-                return;
+                    alert("등교시간이 비어있습니다.");
+                    startTimeInput.focus();
+                    return;
                 }
 
                 if (endTime.trim() === "") {
-                alert("하교시간이 비어있습니다.");
-                endTimeInput.focus();
-                return;
+                    alert("하교시간이 비어있습니다.");
+                    endTimeInput.focus();
+                    return;
                 }
-                
+
 
                 $.ajax({
                     url: 'update_hours.php',
@@ -325,10 +220,13 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
             /////////////////////////////
             setInterval(function() {
                 $.ajax({
-                    url: 'fetch.php', 
+                    url: 'fetch.php',
                     type: 'POST',
+                    data: {
+                        page: '<?php echo $page; ?>'
+                    },
                     success: function(data) {
-                        $('#table-body').html(data); 
+                        $('#table-body').html(data);
                     }
                 });
                 $.ajax({
