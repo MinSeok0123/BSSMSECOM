@@ -2,7 +2,7 @@
 include 'db.php';
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
 
-$query = "SELECT * FROM tbl ORDER BY id DESC LIMIT 1;";
+$query = "SELECT * FROM tbl ORDER BY id ASC LIMIT 1;";
 $result_recent = mysqli_query($conn, $query);
 if ($row = mysqli_fetch_assoc($result_recent)) {
     $rtTimestamp = strtotime($row['rt']);
