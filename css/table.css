@@ -7,19 +7,9 @@ table {
   margin: auto;
 }
 
-caption {
-  font-weight: bold;
-}
-
-table td {
-  padding: 10px;
-  background-color: #eee;
-}
-
-table th {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
+.table-body {
+  width: 100%;
+  display: block;
 }
 
 img {
@@ -27,20 +17,21 @@ img {
   height: 90px;
 }
 
-.view,
 .delete {
-  border: none;
-  padding: 5px 10px;
-  color: #fff;
-  font-weight: bold;
-}
-
-.view {
-  background-color: #03a9f4;
-}
-
-.delete {
-  background-color: #dc3546;
+  display: flex;
+  width: 50px;
+  height: 30px;
+  background-color: #c71022;
+  text-decoration: none;
+  border: solid 2px #d6494e;
+  background-color: #f9dedf;
+  color: #c71022;
+  text-align: center;
+  align-items: center;
+  border-radius: 5px;
+  justify-content: center;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .tablefoot {
@@ -77,5 +68,112 @@ img {
   text-decoration: none;
   background-color: #009688;
   position: relative;
-  position:absolute;
+  position: absolute;
+}
+
+.thead {
+  width: 60%;
+  height: 30px;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  align-items: center;
+  color: #a3a3a3;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.tblcenter {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.tbl {
+  position: relative;
+  width: 60%;
+  height: 60px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  align-items: center;
+  color: black;
+  border: solid 2px #ebeff8;
+  font-size: 16px;
+  margin: 5px;
+}
+
+.id {
+  width: 8%;
+}
+
+.rt {
+  width: 8%;
+}
+
+.motion {
+  width: 8%;
+}
+
+.check {
+  width: 8%;
+}
+
+.del {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 8%;
+}
+
+.RGB-S {
+  position: absolute;
+  height: 100%;
+  left: 0;
+  width: 15px;
+  border-radius: 12px 0px 0px 12px;
+}
+
+.tablenav {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tablenavcenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 60%;
+  height: 50px;
+}
+
+.school {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  position: absolute;
+  width: 120px;
+  height: 35px;
+  border-radius: 5px;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+  border: solid 2px black;
+}
+
+.schoolicon {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.recent {
+  position: absolute;
+  right: 345px;
+  color: #9f9f9f;
 }

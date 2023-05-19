@@ -20,17 +20,20 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
 }
 
 while ($row = mysqli_fetch_assoc($result)) {
-    echo "<tr>";
-    echo "<td>".$row['id']."</td>";
-    echo "<td>".$row['rt']."</td>";
-    echo "<td>".($row['motion'] == 1 ? 'O' : 'X')."</td>";
     $rtTime = strtotime($row['rt']);
     $rtFormatted = date("H:i", $rtTime);
     $inWorkHours = $row['motion'] == 1 && $rtFormatted >= $startTime && $rtTime <= $endTime;
-    echo "<td>" . ($inWorkHours ? 'O' : 'X') . "</td>";
-    echo "<td>";
-    echo '<a style="text-decoration: none;" href="?delete_id='.$row['id'].'" onclick="return confirm(\'정말로 삭제 하시겠습니까?\');" class="delete">삭제</a>';
-    echo "</td>";
-    echo "</tr>";
+    echo '<div class="tblcenter">';
+    echo '<div class="tbl">';
+    echo '<div class="RGB-S" style="' . (($inWorkHours && $row['motion'] == 1) ? 'background-color: #C71022;' : (($row['motion'] == 1) ? 'background-color: #359322;' : 'background-color: #0866CF;')) . '"></div>';
+    echo '<span class="id">' . $row['id'] . "</span>";
+    echo '<span class="rt">' . $row['rt'] . "</span>";
+    echo '<span class="motion">' . ($row['motion'] == 1 ? 'O' : 'X') . "</span>";
+    echo '<span class="check">' . ($inWorkHours ? 'O' : 'X') . "</span>";
+    echo '<div class="del">';
+    echo '<a href="?delete_id=' . $row['id'] . '" onclick="return confirm(\'정말로 삭제 하시겠습니까?\');" class="delete">삭제</a>';
+    echo "</div>";
+    echo "</div>";
+    echo "</div>";
 }
 ?>

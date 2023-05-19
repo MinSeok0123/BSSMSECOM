@@ -36,8 +36,14 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
         $recentUpdate = $timeDiff . '초 전';
     } elseif ($timeDiff < 3600) {
         $recentUpdate = floor($timeDiff / 60) . '분 전';
-    } else {
+    } elseif ($timeDiff < 86400) {
         $recentUpdate = floor($timeDiff / 3600) . '시간 전';
+    } elseif ($timeDiff < 2592000) {
+        $recentUpdate = floor($timeDiff / 86400) . '일 전';
+    } elseif ($timeDiff < 31536000) {
+        $recentUpdate = floor($timeDiff / 2592000) . '달 전';
+    } else {
+        $recentUpdate = floor($timeDiff / 31536000) . '년 전';
     }
 }
 
@@ -70,65 +76,80 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
     <div class="tablebox">
         <div class="tablewrap">
             <table>
-                <caption>출입자 관리</caption>
-                <span id="recent-update">최근 업데이트: <?php echo $recentUpdate; ?></span>
-                <button id="modify-work-hours-btn">일과시간 수정</button>
+                <div class="tablenav">
+                <div class="tablenavcenter">
+                <div class="school" id="modify-work-hours-btn">
+                    <span class="schoolicon">일과시간 수정</span>
+                </div>
+                </div>
+                </div>
                 <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>출입시간</th>
-                        <th>출입여부</th>
-                        <th>일과시간 출입</th>
-                        <th>삭제</th>
-                    </tr>
+                    <div class="thead">
+                        <span class="id">번호</span>
+                        <span class="rt">출입시간</span>
+                        <span class="motion">출입여부</span>
+                        <span class="check">일과시간 출입</span>
+                        <span class="del">삭제</span>
+                    </div>
                 </thead>
-                <tbody id="table-body">
+                <div id="table-body" class="table-body">
                     <?php
                     while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
-                        echo "<td>" . $row['id'] . "</td>";
-                        echo "<td>" . $row['rt'] . "</td>";
-                        echo "<td>" . ($row['motion'] == 1 ? 'O' : 'X') . "</td>";
                         $rtTime = strtotime($row['rt']);
                         $rtFormatted = date("H:i", $rtTime);
                         $inWorkHours = $row['motion'] == 1 && $rtFormatted >= $startTime && $rtTime <= $endTime;
-                        echo "<td>" . ($inWorkHours ? 'O' : 'X') . "</td>";
-                        echo "<td>";
-                        echo '<a style="text-decoration: none;" href="?delete_id=' . $row['id'] . '" onclick="return confirm(\'정말로 삭제 하시겠습니까?\');" class="delete">삭제</a>';
-                        echo "</td>";
-                        echo "</tr>";
+                        echo '<div class="tblcenter">';
+                        echo '<div class="tbl">';
+                        echo '<div class="RGB-S" style="' . (($inWorkHours && $row['motion'] == 1) ? 'background-color: #C71022;' : (($row['motion'] == 1) ? 'background-color: #359322;' : 'background-color: #0866CF;')) . '"></div>';
+                        echo '<span class="id">' . $row['id'] . "</span>";
+                        echo '<span class="rt">' . $row['rt'] . "</span>";
+                        echo '<span class="motion">' . ($row['motion'] == 1 ? 'O' : 'X') . "</span>";
+                        echo '<span class="check">' . ($inWorkHours ? 'O' : 'X') . "</span>";
+                        echo '<div class="del">';
+                        echo '<a href="?delete_id=' . $row['id'] . '" onclick="return confirm(\'정말로 삭제 하시겠습니까?\');" class="delete">삭제</a>';
+                        echo "</div>";
+                        echo "</div>";
+                        echo "</div>";
                     }
                     ?>
-                </tbody>
-                <tfoot>
-                    <td colspan="5" class="tablefoot">
-                        <div style="display: flex; width: 100%; height: 30px; justify-content: center; align-items: center;">
-                            <div style="width:30px;height:30px; display:flex; justify-content: center; align-items: center; text-align:center;">
-                                <?php if ($page > 1) : ?>
-                                    <a style="width:30px;height:30px; display:flex; align-items: center; justify-content: center;" href="?page=<?php echo $page - 1; ?>">
-                                        <img style="width:10px;height:15px;" src="img/abblack.png"></img>
-                                    </a>
-                                <?php endif; ?>
-                            </div>
-                            <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-                                <div style="width:30px;height:30px; margin:5px; <?php if ($i == $page) echo 'background-color:#A1B74F;'; else echo 'background-color:none;';?> border-radius:3px; display:flex; justify-content: center; align-items: center; text-align:center;">
-                                    <a style="text-decoration: none; <?php if ($i == $page) echo 'color:white;'; else echo 'color:black;';?>" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                                </div>
-                            <?php endfor; ?>
-                            <div style="width:30px;height:30px; display:flex; justify-content: center; align-items: center; text-align:center;">
-                                <?php if ($page < $totalPages) : ?>
-                                    <a style="width:30px;height:30px; display:flex; align-items: center; justify-content: center;" href="?page=<?php echo $page + 1; ?>">
-                                        <img style="width:10px;height:15px;" src="img/afblack.png"></img>
-                                    </a>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </td>
-                </tfoot>
+                </div>
             </table>
+            <tfoot>
+                <td colspan="5" class="tablefoot">
+                    <div style="position:relative; display: flex; width: 100%; height: 70px; justify-content: center; align-items: center;">
+                        <div style="width:40px;height:40px; display:flex; justify-content: center; align-items: center; text-align:center;">
+                            <?php if ($page > 1) : ?>
+                                <a style="width:40px;height:40px; display:flex; align-items: center; justify-content: center;" href="?page=<?php echo $page - 1; ?>">
+                                    <img style="width:10px;height:15px; filter: grayscale(100%);" src="img/abblack.png"></img>
+                                </a>
+                            <?php else: ?>
+                                <div style="width:40px;height:40px; display:flex; align-items: center; justify-content: center;">
+                                    <img style="width:10px;height:15px; filter: grayscale(100%);" src="img/abgray.png"></img>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                            <div style="width:40px;height:40px; margin:5px; cursor:pointer; <?php if ($i == $page) echo 'background-color:black;'; else echo 'background-color:none;';?> border-radius:10px; display:flex; justify-content: center; align-items: center; text-align:center;">
+                                <a style="text-decoration: none; font-weight:bold; <?php if ($i == $page) echo 'color:white;'; else echo 'color:black;';?>" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                            </div>
+                        <?php endfor; ?>
+                        <div style="width:40px;height:40px; display:flex; justify-content: center; align-items: center; text-align:center;">
+                            <?php if ($page < $totalPages) : ?>
+                                <a style="width:40px;height:40px; display:flex; align-items: center; justify-content: center;" href="?page=<?php echo $page + 1; ?>">
+                                    <img style="width:10px;height:15px; filter: grayscale(100%);" src="img/afblack.png"></img>
+                                </a>
+                            <?php else: ?>
+                                <div style="width:40px;height:40px; display:flex; align-items: center; justify-content: center;">
+                                    <img style="width:10px;height:15px; filter: grayscale(100%);" src="img/afgray.png"></img>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <span class="recent" id="recent-update">최근 업데이트: <?php echo $recentUpdate; ?></span>
+                    </div>
+                </td>
+            </tfoot>
         </div>
     </div>
-
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
