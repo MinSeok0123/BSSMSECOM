@@ -40,7 +40,7 @@ img {
 }
 
 .delete {
-  background-color: #e91e63;
+  background-color: #dc3546;
 }
 
 .tablefoot {
@@ -73,7 +73,9 @@ img {
 .fdsa {
   justify-content: center;
   align-items: center;
-  background-color:#03a9f4;
+  background-color: #03a9f4;
   text-decoration: none;
-  background-color:#009688
+  background-color: #009688;
+  position: relative;
+  position:absolute;
 }

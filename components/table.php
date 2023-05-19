@@ -101,24 +101,27 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                     ?>
                 </tbody>
                 <tfoot>
-                    
                     <td colspan="5" class="tablefoot">
-                    <div style="display: flex; width: 100%; height: 30px; justify-content: center; align-items: center;">
-                        <?php if ($page > 1) : ?>
+                        <div style="display: flex; width: 100%; height: 30px; justify-content: center; align-items: center;">
                             <div style="width:30px;height:30px; display:flex; justify-content: center; align-items: center; text-align:center;">
-                            <a style="text-decoration: none; color:black;" href="?page=<?php echo $page - 1; ?>"><</a>
+                                <?php if ($page > 1) : ?>
+                                    <a style="width:30px;height:30px; display:flex; align-items: center; justify-content: center;" href="?page=<?php echo $page - 1; ?>">
+                                        <img style="width:10px;height:15px;" src="img/abblack.png"></img>
+                                    </a>
+                                <?php endif; ?>
                             </div>
-                        <?php endif; ?>
-                        <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-                            <div style="width:30px;height:30px; margin:5px; background-color:#03a9f4; border-radius:3px; display:flex; justify-content: center; align-items: center; text-align:center;">
-                            <a style="text-decoration: none; color: white;" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                            </div>
-                        <?php endfor; ?>
-                        <?php if ($page < $totalPages) : ?>
+                            <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                                <div style="width:30px;height:30px; margin:5px; <?php if ($i == $page) echo 'background-color:#A1B74F;'; else echo 'background-color:none;';?> border-radius:3px; display:flex; justify-content: center; align-items: center; text-align:center;">
+                                    <a style="text-decoration: none; <?php if ($i == $page) echo 'color:white;'; else echo 'color:black;';?>" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </div>
+                            <?php endfor; ?>
                             <div style="width:30px;height:30px; display:flex; justify-content: center; align-items: center; text-align:center;">
-                            <a style="text-decoration: none; color:black;" href="?page=<?php echo $page + 1; ?>">></a>
+                                <?php if ($page < $totalPages) : ?>
+                                    <a style="width:30px;height:30px; display:flex; align-items: center; justify-content: center;" href="?page=<?php echo $page + 1; ?>">
+                                        <img style="width:10px;height:15px;" src="img/afblack.png"></img>
+                                    </a>
+                                <?php endif; ?>
                             </div>
-                        <?php endif; ?>
                         </div>
                     </td>
                 </tfoot>
