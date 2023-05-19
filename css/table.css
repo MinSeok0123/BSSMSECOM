@@ -168,7 +168,8 @@ img {
 }
 
 .school:hover {
-  background-color: #dadada;
+  background-color: black;
+  color: white;
   transition: all ease 0.5s;
 }
 
