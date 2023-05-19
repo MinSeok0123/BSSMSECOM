@@ -34,8 +34,8 @@
   for (var i = 0; i < navLinks.length; i++) {
     var link = navLinks[i].href;
 
-    // 현재 페이지와 주소가 일치하면 해당 링크에 'selected' 클래스를 추가
-    if (currentPage === link) {
+    // 현재 페이지와 주소가 포함되어 일치하면 해당 링크에 'selected' 클래스를 추가
+    if (currentPage.indexOf(link) !== -1) {
       navLinks[i].classList.add('selected');
     }
   }
