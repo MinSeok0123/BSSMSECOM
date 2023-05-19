@@ -25,7 +25,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $inWorkHours = $row['motion'] == 1 && $rtFormatted >= $startTime && $rtTime <= $endTime;
     echo '<div class="tblcenter">';
     echo '<div class="tbl">';
-    echo '<div class="RGB-S" style="' . (($inWorkHours && $row['motion'] == 1) ? 'background-color: #C71022;' : (($row['motion'] == 1) ? 'background-color: #359322;' : 'background-color: #0866CF;')) . '"></div>';
+    echo '<div class="RGB-S" style="' . (($inWorkHours && $row['motion'] == 1) ? 'background-color: #F9DEDF;' : (($row['motion'] == 1) ? 'background-color: #E2F0DB;' : 'background-color: #DEE9F9;')) . '"></div>';
     echo '<span class="id">' . $row['id'] . "</span>";
     echo '<span class="rt">' . $row['rt'] . "</span>";
     echo '<span class="motion">' . ($row['motion'] == 1 ? 'O' : 'X') . "</span>";

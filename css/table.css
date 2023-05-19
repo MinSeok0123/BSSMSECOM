@@ -132,7 +132,7 @@ img {
   position: absolute;
   height: 100%;
   left: 0;
-  width: 15px;
+  width: 30px;
   border-radius: 12px 0px 0px 12px;
 }
 
@@ -167,6 +167,11 @@ img {
   border: solid 2px black;
 }
 
+.school:hover {
+  background-color: #dadada;
+  transition: all ease 0.5s;
+}
+
 .schoolicon {
   font-size: 16px;
   font-weight: 600;
@@ -175,5 +180,27 @@ img {
 .recent {
   position: absolute;
   right: 345px;
+  color: #9f9f9f;
+}
+
+.entermanage {
+  align-items: center;
+  display: flex;
+  position: absolute;
+  width: 180px;
+  height: 40px;
+  left: 0;
+  top: 0;
+}
+
+.출입자관리 {
+  font-size: 25px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.출입자관리수 {
+  font-size: 25px;
+  font-weight: bold;
   color: #9f9f9f;
 }
