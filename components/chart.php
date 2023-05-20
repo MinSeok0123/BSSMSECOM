@@ -14,7 +14,7 @@ $row = mysqli_fetch_assoc($result);
 </head>
 <body>
 <div style="width:85%; justify-content: space-between; align-items: center; display:flex;">
-<div style="position:relative;width:280px; height:170px; box-shadow: 0px 11px 30px rgba(0, 0, 0, 0.25); border-radius:10px;">
+<div style="position:relative;width:280px; height:170px; border-radius:10px;">
 <div style="width:120px; margin-left:25px; margin-top:25px;">
     <canvas id="temperatureChart"></canvas>
 </div>
@@ -26,7 +26,7 @@ $row = mysqli_fetch_assoc($result);
 	<?php echo $row['temperature']; ?>°C
 	</div>
 </div>
-<div style="position:relative;width:280px; height:170px; box-shadow: 0px 11px 30px rgba(0, 0, 0, 0.25); border-radius:10px;">
+<div style="position:relative;width:280px; height:170px; border-radius:10px;">
 <div style="width:120px; margin-left:25px; margin-top:25px;">
     <canvas id="humidityChart"></canvas>
 </div>
