@@ -33,7 +33,7 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
     $timeDiff = $currentTimestamp - $rtTimestamp;
 
     if ($timeDiff < 60) {
-        $recentUpdate = $timeDiff . '초 전';
+        $recentUpdate = '방금 전';
     } elseif ($timeDiff < 3600) {
         $recentUpdate = floor($timeDiff / 60) . '분 전';
     } elseif ($timeDiff < 86400) {
@@ -114,7 +114,7 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                         echo "</div>";
                         echo "</div>";
                         echo "</div>";
-                    }
+                }
                     ?>
                 </div>
             </table>
