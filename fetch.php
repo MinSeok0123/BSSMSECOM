@@ -1,29 +1,38 @@
 <?php
 include 'db.php';
+
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
-
-$page = isset($_POST['page']) ? $_POST['page'] : 1;
-$limit = 7;
-$offset = ($page - 1) * $limit;
-
-$query = "SELECT * FROM tbl";
-
-if (isset($_POST['filter']) && $_POST['filter'] === '1') {
-    $query .= " WHERE motion = 1";
-}
-
-$query .= " ORDER BY id DESC LIMIT $offset, $limit;";
-$result = mysqli_query($conn, $query);
 
 $query = "SELECT * FROM time LIMIT 1;";
 $result_time = mysqli_query($conn, $query);
-if ($row_time = mysqli_fetch_assoc($result_time)) {
+
+if (mysqli_num_rows($result_time) > 0) {
+    $row_time = mysqli_fetch_assoc($result_time);
     $startTime = $row_time['start'];
     $endTime = $row_time['end'];
 } else {
     $startTime = '07:30';
     $endTime = '20:30';
 }
+
+$page = isset($_POST['page']) ? $_POST['page'] : 1;
+$recordsPerPage = 7;
+$offset = ($page - 1) * $recordsPerPage;
+
+$query = "SELECT * FROM tbl";
+
+if (isset($_POST['filter']) && $_POST['filter'] === '1') {
+    $query .= " WHERE motion = 1";
+} elseif (isset($_POST['filter']) && $_POST['filter'] === '2') {
+    $query .= " WHERE motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
+} else {
+    $query .= " WHERE motion >= 0";
+}
+
+$query .= " ORDER BY id DESC LIMIT $offset, $recordsPerPage;";
+
+$result = mysqli_query($conn, $query);
+
 
 while ($row = mysqli_fetch_assoc($result)) {
     $rtTime = strtotime($row['rt']);

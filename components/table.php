@@ -2,6 +2,16 @@
 include 'db.php';
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
 
+$query = "SELECT * FROM time LIMIT 1;";
+$result_time = mysqli_query($conn, $query);
+if ($row_time = mysqli_fetch_assoc($result_time)) {
+    $startTime = $row_time['start'];
+    $endTime = $row_time['end'];
+} else {
+    $startTime = '07:30';
+    $endTime = '20:30';
+}
+
 $recentUpdate = '';
 
 if (isset($_GET['delete_id'])) {
@@ -19,6 +29,10 @@ $query = "SELECT * FROM tbl";
 
 if (isset($_GET['filter']) && $_GET['filter'] === '1') {
     $query .= " WHERE motion = 1";
+} elseif (isset($_GET['filter']) && $_GET['filter'] === '2') {
+    $query .= " WHERE motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
+} else {
+    $query .= " WHERE motion >= 0";
 }
 
 $query .= " ORDER BY id DESC LIMIT $offset, $recordsPerPage;";
@@ -29,6 +43,10 @@ $query = "SELECT COUNT(*) as total FROM tbl";
 
 if (isset($_GET['filter']) && $_GET['filter'] === '1') {
     $query .= " WHERE motion = 1";
+} elseif (isset($_GET['filter']) && $_GET['filter'] === '2') {
+    $query .= " WHERE motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
+} else {
+    $query .= " WHERE motion >= 0";
 }
 
 $totalRowsResult = mysqli_query($conn, $query);
@@ -58,16 +76,6 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
         $recentUpdate = floor($timeDiff / 31536000) . '년 전';
     }
 }
-
-$query = "SELECT * FROM time LIMIT 1;";
-$result_time = mysqli_query($conn, $query);
-if ($row_time = mysqli_fetch_assoc($result_time)) {
-    $startTime = $row_time['start'];
-    $endTime = $row_time['end'];
-} else {
-    $startTime = '07:30';
-    $endTime = '20:30';
-}
 ?>
 
 <!DOCTYPE html>
@@ -94,9 +102,12 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                 <span class="출입자관리">출입자 관리 </span>
                 <span class="출입자관리수"><?php echo $totalRows; ?></span>
                 </div>
-                <div style="" class="fillter">
+                <div class="fillter">
                     <div>
                     <a class="출입여부" href="?page=<?php echo $page; ?>&filter=1">출입 여부 O</a>
+                    </div>
+                    <div>
+                    <a class="출입여부" href="?page=<?php echo $page; ?>&filter=2">일과 출입 여부 O</a>
                     </div>
                     <div>
                     <a class="전체보기" href="?page=<?php echo $page; ?>">전체보기</a>
