@@ -61,16 +61,6 @@ img {
   flex-direction: column;
 }
 
-.fdsa {
-  justify-content: center;
-  align-items: center;
-  background-color: #03a9f4;
-  text-decoration: none;
-  background-color: #009688;
-  position: relative;
-  position: absolute;
-}
-
 .thead {
   width: 60%;
   height: 30px;
@@ -154,13 +144,13 @@ img {
 }
 
 .fillter {
-  width: 260px;
+  width: 300px;
   height: 35px;
   align-items: center;
   justify-content: center;
   display: flex;
-  right: 130px;
-  top: 0;
+  right: 370px;
+  top: 2px;
   position: absolute;
 }
 
@@ -179,12 +169,53 @@ img {
 }
 
 .출입여부 {
+  border: solid 2px #fdcb6e;
+  width: 80px;
+  height: 35px;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  cursor: pointer;
 }
 
 .일과출입 {
+  border: solid 2px #eb2f06;
+  width: 120px;
+  height: 35px;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-left: 5px;
+  cursor: pointer;
 }
 
 .전체보기 {
+  border: solid 2px #0984e3;
+  width: 80px;
+  height: 35px;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.출입여부t {
+  color: #fdcb6e;
+  text-decoration: none;
+}
+
+.일과출입t {
+  color: #eb2f06;
+  text-decoration: none;
+}
+
+.전체보기t {
+  color: #0984e3;
+  text-decoration: none;
 }
 
 .school:hover {
