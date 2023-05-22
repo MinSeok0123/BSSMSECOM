@@ -6,7 +6,13 @@ $page = isset($_POST['page']) ? $_POST['page'] : 1;
 $limit = 7;
 $offset = ($page - 1) * $limit;
 
-$query = "SELECT * FROM tbl ORDER BY id DESC LIMIT $offset, $limit;";
+$query = "SELECT * FROM tbl";
+
+if (isset($_POST['filter']) && $_POST['filter'] === '1') {
+    $query .= " WHERE motion = 1";
+}
+
+$query .= " ORDER BY id DESC LIMIT $offset, $limit;";
 $result = mysqli_query($conn, $query);
 
 $query = "SELECT * FROM time LIMIT 1;";

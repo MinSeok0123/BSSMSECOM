@@ -153,6 +153,17 @@ img {
   height: 50px;
 }
 
+.fillter {
+  width: 260px;
+  height: 35px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  right: 130px;
+  top: 0;
+  position: absolute;
+}
+
 .school {
   align-items: center;
   justify-content: center;
@@ -165,6 +176,15 @@ img {
   top: 0;
   cursor: pointer;
   border: solid 2px black;
+}
+
+.출입여부 {
+}
+
+.일과출입 {
+}
+
+.전체보기 {
 }
 
 .school:hover {

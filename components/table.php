@@ -15,11 +15,23 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $recordsPerPage = 7;
 $offset = ($page - 1) * $recordsPerPage;
 
-$query = "SELECT * FROM tbl ORDER BY id DESC LIMIT $offset, $recordsPerPage;";
+$query = "SELECT * FROM tbl";
+
+if (isset($_GET['filter']) && $_GET['filter'] === '1') {
+    $query .= " WHERE motion = 1";
+}
+
+$query .= " ORDER BY id DESC LIMIT $offset, $recordsPerPage;";
+
 $result = mysqli_query($conn, $query);
 
-$totalRowsQuery = "SELECT COUNT(*) as total FROM tbl";
-$totalRowsResult = mysqli_query($conn, $totalRowsQuery);
+$query = "SELECT COUNT(*) as total FROM tbl";
+
+if (isset($_GET['filter']) && $_GET['filter'] === '1') {
+    $query .= " WHERE motion = 1";
+}
+
+$totalRowsResult = mysqli_query($conn, $query);
 $totalRows = mysqli_fetch_assoc($totalRowsResult)['total'];
 $totalPages = ceil($totalRows / $recordsPerPage);
 
@@ -82,6 +94,14 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                 <span class="출입자관리">출입자 관리 </span>
                 <span class="출입자관리수"><?php echo $totalRows; ?></span>
                 </div>
+                <div style="" class="fillter">
+                    <div>
+                    <a class="출입여부" href="?page=<?php echo $page; ?>&filter=1">출입 여부 O</a>
+                    </div>
+                    <div>
+                    <a class="전체보기" href="?page=<?php echo $page; ?>">전체보기</a>
+                    </div>
+                </div>
                 <div class="school" id="modify-work-hours-btn">
                     <span class="schoolicon">일과시간 수정</span>
                 </div>
@@ -134,7 +154,7 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                         </div>
                         <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
                             <div style="width:40px;height:40px; margin:5px; cursor:pointer; <?php if ($i == $page) echo 'background-color:black;'; else echo 'background-color:none;';?> border-radius:10px; display:flex; justify-content: center; align-items: center; text-align:center;">
-                                <a style="text-decoration: none; font-weight:bold; <?php if ($i == $page) echo 'color:white;'; else echo 'color:black;';?>" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                            <a style="text-decoration: none; width:40px;height:40px; display:flex; justify-content: center; text-align:center; align-items:center; font-weight:bold; <?php if ($i == $page) echo 'color:white;'; else echo 'color:black;';?>" href="?page=<?php echo $i . (isset($_GET['filter']) ? '&filter=' . $_GET['filter'] : ''); ?>"><?php echo $i; ?></a>
                             </div>
                         <?php endfor; ?>
                         <div style="width:40px;height:40px; display:flex; justify-content: center; align-items: center; text-align:center;">
@@ -260,7 +280,8 @@ if ($row_time = mysqli_fetch_assoc($result_time)) {
                     url: 'fetch.php',
                     type: 'POST',
                     data: {
-                        page: '<?php echo $page; ?>'
+                        page: '<?php echo $page; ?>',
+                        filter: '<?php echo isset($_GET["filter"]) ? $_GET["filter"] : ""; ?>'
                     },
                     success: function(data) {
                         $('#table-body').html(data);
