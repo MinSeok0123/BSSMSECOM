@@ -1,0 +1,24 @@
+.clickbody {
+  position: absolute;
+  top: 80px;
+  bottom: 80px;
+  display: flex;
+  width: 100%;
+  height: auto;
+  background-color: white;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.openbtn {
+  position: relative;
+  cursor: pointer;
+}
+
+.hand {
+  position: absolute;
+  top: 40%;
+  right: 15%;
+  cursor: pointer;
+}
