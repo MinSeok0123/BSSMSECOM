@@ -32,7 +32,7 @@ if (isset($_GET['filter']) && $_GET['filter'] === '1') {
 } elseif (isset($_GET['filter']) && $_GET['filter'] === '2') {
     $query .= " WHERE motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
 } else {
-    $query .= " WHERE motion >= 0";
+    $query .= " WHERE motion != 0";
 }
 
 $query .= " ORDER BY id DESC LIMIT $offset, $recordsPerPage;";
@@ -46,7 +46,7 @@ if (isset($_GET['filter']) && $_GET['filter'] === '1') {
 } elseif (isset($_GET['filter']) && $_GET['filter'] === '2') {
     $query .= " WHERE motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
 } else {
-    $query .= " WHERE motion >= 0";
+    $query .= " WHERE motion != 0";
 }
 
 $totalRowsResult = mysqli_query($conn, $query);
@@ -103,14 +103,14 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
                 <span class="출입자관리수"><?php echo $totalRows; ?></span>
                 </div>
                 <div class="fillter">
-                    <div>
-                    <a class="출입여부" href="?page=<?php echo $page; ?>&filter=1">출입 여부 O</a>
+                    <!-- <div class="출입여부">
+                    <a class="출입여부t" href="?page=<?php echo $page; ?>&filter=1">출입 여부</a>
+                    </div> -->
+                    <div class="일과출입">
+                    <a class="일과출입t" href="?page=<?php echo $page; ?>&filter=2">일과 출입 여부</a>
                     </div>
-                    <div>
-                    <a class="출입여부" href="?page=<?php echo $page; ?>&filter=2">일과 출입 여부 O</a>
-                    </div>
-                    <div>
-                    <a class="전체보기" href="?page=<?php echo $page; ?>">전체보기</a>
+                    <div class="전체보기">
+                    <a class="전체보기t" href="?page=<?php echo $page; ?>">전체보기</a>
                     </div>
                 </div>
                 <div class="school" id="modify-work-hours-btn">
@@ -130,9 +130,10 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
                 <div id="table-body" class="table-body">
                     <?php
                     while ($row = mysqli_fetch_assoc($result)) {
-                        $rtTime = strtotime($row['rt']);
-                        $rtFormatted = date("H:i", $rtTime);
-                        $inWorkHours = $row['motion'] == 1 && $rtFormatted >= $startTime && $rtTime <= $endTime;
+                        $rtDateTime = strtotime($row['rt']);
+                        $rtFormatted = date("H:i", $rtDateTime);
+                        $rtDate = date("Y-m-d", $rtDateTime);
+                        $inWorkHours = $row['motion'] == 1 && $rtFormatted >= $startTime && $rtFormatted <= $endTime && $rtDate == date("Y-m-d");
                         echo '<div class="tblcenter">';
                         echo '<div class="tbl">';
                         echo '<div class="RGB-S" style="' . (($inWorkHours && $row['motion'] == 1) ? 'background-color: #F9DEDF;' : (($row['motion'] == 1) ? 'background-color: #E2F0DB;' : 'background-color: #DEE9F9;')) . '"></div>';
@@ -163,11 +164,20 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
                                 </div>
                             <?php endif; ?>
                         </div>
-                        <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                        <?php
+                        $startPage = max(1, $page - 2);
+                        $endPage = min($startPage + 4, $totalPages);
+                        for ($i = $startPage; $i <= $endPage; $i++) : ?>
                             <div style="width:40px;height:40px; margin:5px; cursor:pointer; <?php if ($i == $page) echo 'background-color:black;'; else echo 'background-color:none;';?> border-radius:10px; display:flex; justify-content: center; align-items: center; text-align:center;">
-                            <a style="text-decoration: none; width:40px;height:40px; display:flex; justify-content: center; text-align:center; align-items:center; font-weight:bold; <?php if ($i == $page) echo 'color:white;'; else echo 'color:black;';?>" href="?page=<?php echo $i . (isset($_GET['filter']) ? '&filter=' . $_GET['filter'] : ''); ?>"><?php echo $i; ?></a>
+                                <a style="text-decoration: none; width:40px;height:40px; display:flex; justify-content: center; text-align:center; align-items:center; font-weight:bold; <?php if ($i == $page) echo 'color:white;'; else echo 'color:black;';?>" href="?page=<?php echo $i . (isset($_GET['filter']) ? '&filter=' . $_GET['filter'] : ''); ?>"><?php echo $i; ?></a>
                             </div>
                         <?php endfor; ?>
+                        <?php if ($endPage < $totalPages) : ?>
+                            <div style="width:40px;height:40px; display:flex; justify-content: center; align-items: center; text-align:center;">
+                                <span style="margin-right: 5px;">...</span>
+                                <a style="text-decoration: none; width:40px;height:40px; display:flex; justify-content: center; text-align:center; align-items:center; font-weight:bold; color:black;" href="?page=<?php echo $totalPages . (isset($_GET['filter']) ? '&filter=' . $_GET['filter'] : ''); ?>"><?php echo $totalPages; ?></a>
+                            </div>
+                        <?php endif; ?>
                         <div style="width:40px;height:40px; display:flex; justify-content: center; align-items: center; text-align:center;">
                             <?php if ($page < $totalPages) : ?>
                                 <a style="width:40px;height:40px; display:flex; align-items: center; justify-content: center;" href="?page=<?php echo $page + 1; ?>">
@@ -214,6 +224,15 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const filterParam = urlParams.get('filter');
+
+            if (filterParam === '2') {
+            document.querySelector('.일과출입').style.backgroundColor = '#F9DEDF';
+            } else {
+            document.querySelector('.전체보기').style.backgroundColor = '#DEE9F9';
+            }
+
             var modal = document.getElementById("myModal");
             var btn = document.getElementById("modify-work-hours-btn");
             var span = document.getElementsByClassName("close")[0];

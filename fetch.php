@@ -26,7 +26,7 @@ if (isset($_POST['filter']) && $_POST['filter'] === '1') {
 } elseif (isset($_POST['filter']) && $_POST['filter'] === '2') {
     $query .= " WHERE motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
 } else {
-    $query .= " WHERE motion >= 0";
+    $query .= " WHERE motion != 0";
 }
 
 $query .= " ORDER BY id DESC LIMIT $offset, $recordsPerPage;";
@@ -35,9 +35,10 @@ $result = mysqli_query($conn, $query);
 
 
 while ($row = mysqli_fetch_assoc($result)) {
-    $rtTime = strtotime($row['rt']);
-    $rtFormatted = date("H:i", $rtTime);
-    $inWorkHours = $row['motion'] == 1 && $rtFormatted >= $startTime && $rtTime <= $endTime;
+    $rtDateTime = strtotime($row['rt']);
+    $rtFormatted = date("H:i", $rtDateTime);
+    $rtDate = date("Y-m-d", $rtDateTime);
+    $inWorkHours = $row['motion'] == 1 && $rtFormatted >= $startTime && $rtFormatted <= $endTime && $rtDate == date("Y-m-d");
     echo '<div class="tblcenter">';
     echo '<div class="tbl">';
     echo '<div class="RGB-S" style="' . (($inWorkHours && $row['motion'] == 1) ? 'background-color: #F9DEDF;' : (($row['motion'] == 1) ? 'background-color: #E2F0DB;' : 'background-color: #DEE9F9;')) . '"></div>';
