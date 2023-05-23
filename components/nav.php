@@ -10,6 +10,16 @@ if (!$row) {
   $result = mysqli_query($conn, $query);
   $row = mysqli_fetch_assoc($result);
 }
+
+$query = "SELECT temperature, humidity FROM tbl ORDER BY rt DESC LIMIT 1;";
+$result = mysqli_query($conn, $query);
+$temperature = '';
+$humidity = '';
+if ($result && mysqli_num_rows($result) > 0) {
+  $data = mysqli_fetch_assoc($result);
+  $temperature = $data['temperature'];
+  $humidity = $data['humidity'];
+}
 ?>
 
 <link rel="stylesheet" href="css/nav.css" />
@@ -20,9 +30,9 @@ if (!$row) {
         <img class="vector" src="img/Vector.png"></img>
         <span class="name">기숙사 상태</span>
         <div class="summary">
-          <span id="temperature">온도: <?php echo $row['temperature']; ?> °C</span>
+          <span id="temperature">온도: <?php echo $temperature; ?> °C</span>
           &nbsp&nbsp
-          <span id="humidity">습도: <?php echo $row['humidity']; ?> %</span>
+          <span id="humidity">습도: <?php echo $humidity; ?> %</span>
         </div>
       </div>
     </a>

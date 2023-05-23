@@ -11,6 +11,17 @@ if (!$row) {
   $row = mysqli_fetch_assoc($result);
 }
 
+$query = "SELECT temperature, humidity FROM tbl ORDER BY rt DESC LIMIT 1;";
+$result = mysqli_query($conn, $query);
+$temperature = '';
+$humidity = '';
+if ($result && mysqli_num_rows($result) > 0) {
+  $data = mysqli_fetch_assoc($result);
+  $temperature = $data['temperature'];
+  $humidity = $data['humidity'];
+}
+?>
+
 $data = array(
   'temperature' => $row['temperature'],
   'humidity' => $row['humidity'],
