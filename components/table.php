@@ -102,7 +102,7 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
                 <span class="출입자관리">출입자 관리 </span>
                 <span class="출입자관리수"><?php echo $totalRows; ?></span>
                 </div>
-                <div class="fillter">
+                <div class="fillternavwrap">
                     <!-- <div class="출입여부">
                     <a class="출입여부t" href="?page=<?php echo $page; ?>&filter=1">출입 여부</a>
                     </div> -->
@@ -112,9 +112,9 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
                     <div class="전체보기">
                     <a class="전체보기t" href="?page=<?php echo $page; ?>">전체보기</a>
                     </div>
-                </div>
                 <div class="school" id="modify-work-hours-btn">
                     <span class="schoolicon">일과시간 수정</span>
+                </div>
                 </div>
                 </div>
                 </div>

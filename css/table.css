@@ -143,27 +143,32 @@ img {
   height: 50px;
 }
 
+.fillternavwrap {
+  top: 0;
+  right: 0;
+  position: absolute;
+  display: flex;
+  height: 35px;
+  justify-content: space-around;
+  align-items: center;
+  width: 350px;
+}
+
 .fillter {
   width: 300px;
   height: 35px;
   align-items: center;
   justify-content: center;
   display: flex;
-  right: 370px;
-  top: 2px;
-  position: absolute;
 }
 
 .school {
   align-items: center;
   justify-content: center;
   display: flex;
-  position: absolute;
   width: 120px;
   height: 35px;
   border-radius: 5px;
-  right: 0;
-  top: 0;
   cursor: pointer;
   border: solid 2px black;
 }
@@ -187,7 +192,6 @@ img {
   align-items: center;
   justify-content: center;
   display: flex;
-  margin-left: 5px;
   cursor: pointer;
 }
 
@@ -199,7 +203,6 @@ img {
   align-items: center;
   justify-content: center;
   display: flex;
-  margin-left: 5px;
   cursor: pointer;
 }
 
@@ -231,7 +234,7 @@ img {
 
 .recent {
   position: absolute;
-  right: 345px;
+  right: 20%;
   color: #9f9f9f;
 }
 
