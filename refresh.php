@@ -20,7 +20,7 @@ if ($result && mysqli_num_rows($result) > 0) {
   $temperature = $data['temperature'];
   $humidity = $data['humidity'];
 }
-?>
+
 
 $data = array(
   'temperature' => $row['temperature'],

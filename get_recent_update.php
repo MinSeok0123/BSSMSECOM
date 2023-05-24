@@ -8,16 +8,21 @@ $query = "SELECT * FROM tbl ORDER BY id DESC LIMIT 1;";
 $result_recent = mysqli_query($conn, $query);
 if ($row = mysqli_fetch_assoc($result_recent)) {
     $rtTimestamp = strtotime($row['rt']);
-    date_default_timezone_set('Asia/Seoul');
     $currentTimestamp = strtotime(date_default_timezone_get());
     $timeDiff = $currentTimestamp - $rtTimestamp;
 
     if ($timeDiff < 60) {
-        $recentUpdate = $timeDiff . '초 전';
+        $recentUpdate = '방금 전';
     } elseif ($timeDiff < 3600) {
         $recentUpdate = floor($timeDiff / 60) . '분 전';
-    } else {
+    } elseif ($timeDiff < 86400) {
         $recentUpdate = floor($timeDiff / 3600) . '시간 전';
+    } elseif ($timeDiff < 2592000) {
+        $recentUpdate = floor($timeDiff / 86400) . '일 전';
+    } elseif ($timeDiff < 31536000) {
+        $recentUpdate = floor($timeDiff / 2592000) . '달 전';
+    } else {
+        $recentUpdate = floor($timeDiff / 31536000) . '년 전';
     }
 
     echo $recentUpdate;

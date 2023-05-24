@@ -215,7 +215,7 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
                 </div>
             </div>
             <div class="submitwrap">
-                <input class="submit" type="submit" value="저장">
+                <input onclick="updateTime()" class="submit" type="submit" value="저장">
             </div>
             </form>
         </div>
@@ -223,6 +223,16 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
+        function updateTime() {
+        var startTime = document.getElementById("start-time").value;
+        var endTime = document.getElementById("end-time").value;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "http://10.150.151.103/time?param=startTime=" + startTime + "&endTime=" + endTime, true);
+        xhr.send();
+        }
+
         $(document).ready(function() {
             const urlParams = new URLSearchParams(window.location.search);
             const filterParam = urlParams.get('filter');

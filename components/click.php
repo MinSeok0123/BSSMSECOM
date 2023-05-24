@@ -38,7 +38,7 @@ function handleClick() {
 
 function updateClickValue() {
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://10.150.149.56/click?param=open", true);
+  xhr.open("GET", "http://10.150.151.103/click?param=open", true);
   xhr.send();
 }
 </script>
