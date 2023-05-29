@@ -20,8 +20,21 @@
       <a class="a" href="manage.php">출입자 관리</a>
       <a class="a" href="control.php">원격제어</a>
     </nav>
+    <nav class="join">
+      <?php
+      session_start();
+      if (isset($_SESSION["username"])) {
+        $username = $_SESSION["username"];
+        echo '<a class="username" href="logout.php">'.$username.'</a>';
+      } else {
+        echo '<a class="로그인" href="login.php">로그인</a>';
+        echo '<a class="회원가입" href="register.php">회원가입</a>';
+      }
+      ?>
+    </nav>
   </div>
 </header>
+
 
 <script>
   // 현재 페이지 주소 가져오기
