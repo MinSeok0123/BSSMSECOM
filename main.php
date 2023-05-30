@@ -1,3 +1,9 @@
+<?php
+session_start();
+echo '<script>console.log("Username: '.$_SESSION["username"].'");</script>';
+echo '<script>console.log("ID: '.$_SESSION["id"].'");</script>';
+?>
+
 <!DOCTYPE html>
 <link rel="stylesheet" href="css/main.css">
 <html lang="ko">

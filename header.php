@@ -25,7 +25,7 @@
       session_start();
       if (isset($_SESSION["username"])) {
         $username = $_SESSION["username"];
-        echo '<a class="username" href="logout.php">'.$username.'</a>';
+        echo '<a class="username" href="logout.php">'.$username.'님</a>';
       } else {
         echo '<a class="로그인" href="login.php">로그인</a>';
         echo '<a class="회원가입" href="register.php">회원가입</a>';
