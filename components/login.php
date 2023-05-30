@@ -25,8 +25,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $row = $result->fetch_assoc();
     if (password_verify($password, $row["password"])) {
       $_SESSION["username"] = $username;
-      header("Location: main.php"); // 로그인 성공 시 이동할 페이지
-      exit();
+      $_SESSION["id"] = $row["id"];
+
+      // Check if the id already exists in the "time" table
+      $checkSql = "SELECT * FROM time WHERE id='" . $_SESSION["id"] . "'";
+      $checkResult = $conn->query($checkSql);
+      if ($checkResult->num_rows == 0) {
+        // Insert data into the "time" table
+        $insertSql = "INSERT INTO time (id, start, end) VALUES ('" . $_SESSION["id"] . "', '07:30', '20:30')";
+        if ($conn->query($insertSql) === TRUE) {
+          header("Location: main.php"); // 로그인 성공 시 이동할 페이지
+          exit();
+        } else {
+          echo "Error: " . $insertSql . "<br>" . $conn->error;
+        }
+      } else {
+        header("Location: main.php"); // 로그인 성공 시 이동할 페이지
+        exit();
+      }
     } else {
       echo '<script>alert("아이디 또는 비밀번호가 올바르지 않습니다.");</script>';
     }
