@@ -23,17 +23,16 @@ $offset = ($page - 1) * $recordsPerPage;
 $query = "SELECT * FROM tbl WHERE account = '".$_SESSION["id"]."'";
 
 if (isset($_POST['filter']) && $_POST['filter'] === '1') {
-    $query .= " WHERE motion = 1";
+    $query .= " AND motion = 1";
 } elseif (isset($_POST['filter']) && $_POST['filter'] === '2') {
-    $query .= " WHERE motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
+    $query .= " AND motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
 } else {
-    $query .= " WHERE motion != 0";
+    $query .= " AND motion != 0";
 }
 
 $query .= " ORDER BY id DESC LIMIT $offset, $recordsPerPage;";
 
 $result = mysqli_query($conn, $query);
-
 
 while ($row = mysqli_fetch_assoc($result)) {
     $rtDateTime = strtotime($row['rt']);
