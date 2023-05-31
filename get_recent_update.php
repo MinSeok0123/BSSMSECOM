@@ -1,10 +1,11 @@
 <?php
+session_start();
 include 'db.php';
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
 
 date_default_timezone_set('Asia/Seoul');
 
-$query = "SELECT * FROM tbl ORDER BY id DESC LIMIT 1;";
+$query = "SELECT * FROM tbl WHERE account = '".$_SESSION["id"]."' ORDER BY id DESC LIMIT 1;";
 $result_recent = mysqli_query($conn, $query);
 if ($row = mysqli_fetch_assoc($result_recent)) {
     $rtTimestamp = strtotime($row['rt']);

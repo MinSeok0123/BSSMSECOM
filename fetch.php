@@ -1,9 +1,10 @@
 <?php
+session_start();
 include 'db.php';
 
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
 
-$query = "SELECT * FROM time LIMIT 1;";
+$query = "SELECT * FROM time WHERE id = '".$_SESSION["id"]."' LIMIT 1;";
 $result_time = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result_time) > 0) {
@@ -19,7 +20,7 @@ $page = isset($_POST['page']) ? $_POST['page'] : 1;
 $recordsPerPage = 7;
 $offset = ($page - 1) * $recordsPerPage;
 
-$query = "SELECT * FROM tbl";
+$query = "SELECT * FROM tbl WHERE account = '".$_SESSION["id"]."'";
 
 if (isset($_POST['filter']) && $_POST['filter'] === '1') {
     $query .= " WHERE motion = 1";

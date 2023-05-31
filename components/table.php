@@ -2,7 +2,14 @@
 include 'db.php';
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
 
-$query = "SELECT * FROM time LIMIT 1;";
+session_start();
+$sessionId = $_SESSION["id"];
+$selectQuery = "SELECT ip_address FROM users WHERE id = $sessionId";
+$result = mysqli_query($conn, $selectQuery);
+$row = mysqli_fetch_assoc($result);
+$ipAddress = $row["ip_address"];
+
+$query = "SELECT * FROM time WHERE id = '".$_SESSION["id"]."' LIMIT 1;";
 $result_time = mysqli_query($conn, $query);
 if ($row_time = mysqli_fetch_assoc($result_time)) {
     $startTime = $row_time['start'];
@@ -25,28 +32,28 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $recordsPerPage = 7;
 $offset = ($page - 1) * $recordsPerPage;
 
-$query = "SELECT * FROM tbl";
+$query = "SELECT * FROM tbl WHERE account = '".$_SESSION["id"]."'";
 
 if (isset($_GET['filter']) && $_GET['filter'] === '1') {
-    $query .= " WHERE motion = 1";
+    $query .= " AND motion = 1";
 } elseif (isset($_GET['filter']) && $_GET['filter'] === '2') {
-    $query .= " WHERE motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
+    $query .= " AND motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
 } else {
-    $query .= " WHERE motion != 0";
+    $query .= " AND motion != 0";
 }
 
 $query .= " ORDER BY id DESC LIMIT $offset, $recordsPerPage;";
 
 $result = mysqli_query($conn, $query);
 
-$query = "SELECT COUNT(*) as total FROM tbl";
+$query = "SELECT COUNT(*) as total FROM tbl WHERE account = '".$_SESSION["id"]."'";
 
 if (isset($_GET['filter']) && $_GET['filter'] === '1') {
-    $query .= " WHERE motion = 1";
+    $query .= " AND motion = 1";
 } elseif (isset($_GET['filter']) && $_GET['filter'] === '2') {
-    $query .= " WHERE motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
+    $query .= " AND motion = 1 AND (TIME(rt) >= '$startTime' AND TIME(rt) <= '$endTime')";
 } else {
-    $query .= " WHERE motion != 0";
+    $query .= " AND motion != 0";
 }
 
 $totalRowsResult = mysqli_query($conn, $query);
@@ -55,7 +62,7 @@ $totalPages = ceil($totalRows / $recordsPerPage);
 
 date_default_timezone_set('Asia/Seoul');
 
-$query = "SELECT * FROM tbl ORDER BY id DESC LIMIT 1;";
+$query = "SELECT * FROM tbl WHERE account = '".$_SESSION["id"]."' ORDER BY id DESC LIMIT 1;";
 $result_recent = mysqli_query($conn, $query);
 if ($row = mysqli_fetch_assoc($result_recent)) {
     $rtTimestamp = strtotime($row['rt']);
@@ -229,9 +236,19 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
         var endTime = document.getElementById("end-time").value;
 
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "http://10.150.151.103/time?param=startTime=" + startTime + "&endTime=" + endTime, true);
+        var url = "http://<?php echo $ipAddress; ?>";
+        var params = "param=" + startTime;
+
+        xhr.open("GET", url + "/start?" + params, true);
+        xhr.send();
+
+        xhr = new XMLHttpRequest(); // 새로운 XMLHttpRequest 객체 생성
+        params = "param=" + endTime;
+        xhr.open("GET", url + "/end?" + params, true);
         xhr.send();
         }
+
+
 
         $(document).ready(function() {
             const urlParams = new URLSearchParams(window.location.search);

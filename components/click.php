@@ -1,6 +1,13 @@
 <?php
 include 'db.php';
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
+
+session_start();
+$sessionId = $_SESSION["id"];
+$selectQuery = "SELECT ip_address FROM users WHERE id = $sessionId";
+$result = mysqli_query($conn, $selectQuery);
+$row = mysqli_fetch_assoc($result);
+$ipAddress = $row["ip_address"];
 ?>
 
 <link rel="stylesheet" href="css/click.css" />
@@ -38,7 +45,7 @@ function handleClick() {
 
 function updateClickValue() {
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://10.150.151.103/click?param=open", true);
+  xhr.open("GET", "http://<?php echo $ipAddress; ?>/click?param=open", true);
   xhr.send();
 }
 </script>
