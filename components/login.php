@@ -66,16 +66,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
   <div class="loginbody">
-    <h2>로그인</h2>
-    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-      <label for="username">아이디:</label>
-      <input type="text" id="username" name="username" required><br>
+    <div class="loginwrap">
+      <img class="loginlogo" src="img/secom.png" alt="logo">
+      <!-- <span class="loginlogo">BSSM SECOM</span> -->
+      <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+      <div class="idwrap">
+      <label class="idlabel" for="username">아이디</label>
+      <input class="id" type="text" id="username" name="username" required>
+      </div>
 
-      <label for="password">비밀번호:</label>
-      <input type="password" id="password" name="password" required><br><br>
+      <div class="pwwrap">
+      <label class="pwlabel" for="password">비밀번호</label>
+      <input class="pw" type="password" id="password" name="password" required>
+      </div>
 
-      <input type="submit" value="로그인">
+      <div class="loginbtnwrap">
+      <input class="loginbtn" type="submit" value="로그인">
+      <div class="fun">
+      <a class="goregist" href="register.php">회원가입</a>
+      <span class="sep">|</span>
+      <a class="gofindpw" href="findpw.php">비밀번호 찾기</a>
+      </div>
+      </div>
     </form>
+  </div>
   </div>
 </body>
 </html>
