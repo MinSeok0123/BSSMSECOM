@@ -2,7 +2,7 @@
 session_start();
 include 'db.php';
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
-$query = "SELECT * FROM tbl WHERE click = 1 and account = '".$_SESSION["id"]."' ORDER BY rt DESC LIMIT 1;";
+$query = "SELECT * FROM tbl WHERE account = '".$_SESSION["id"]."' ORDER BY rt DESC LIMIT 1;";
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
 
