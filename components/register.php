@@ -16,12 +16,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $username = $_POST["username"];
   $password = $_POST["password"];
   $ipAddress = $_POST["ip_address"];
+  $email = $_POST["email"];
 
   // 아이디 중복 검사
   $sql = "SELECT * FROM users WHERE username='$username'";
   $result = $conn->query($sql);
   if ($result->num_rows > 0) {
     echo '<script>alert("이미 사용 중인 아이디입니다.");</script>';
+    exit();
+  }
+
+  // 이메일 중복 검사
+  $sql = "SELECT * FROM users WHERE email='$email'";
+  $result = $conn->query($sql);
+  if ($result->num_rows > 0) {
+    echo '<script>alert("이미 사용 중인 이메일입니다.");</script>';
     exit();
   }
 
@@ -35,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
   // 사용자 등록
-  $sql = "INSERT INTO users (username, password, ip_address) VALUES ('$username', '$hashedPassword', '$ipAddress')";
+  $sql = "INSERT INTO users (username, password, ip_address, email) VALUES ('$username', '$hashedPassword', '$ipAddress', '$email')";
   if ($conn->query($sql) === TRUE) {
     echo '<script>alert("회원가입이 완료되었습니다.");</script>';
     header("Location: login.php"); 
@@ -47,81 +56,106 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 <!DOCTYPE html>
-<link rel="stylesheet" href="css/register.css" />
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>회원가입</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
   <style>
     .error {
       color: red;
     }
   </style>
-<script>
-function checkDuplicate() {
-  var username = document.getElementById("username").value;
-  if (username !== "") {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
-          var response = xhr.responseText;
-          if (response === "duplicate") {
-            document.getElementById("duplicateError").innerText = "이미 사용 중인 아이디입니다.";
-            document.getElementById("duplicateError").style.color = "red";
-            document.getElementById("password").disabled = true;
-            document.getElementById("ip_address").disabled = true;
-          } else {
-            document.getElementById("duplicateError").innerText = "사용 가능한 아이디입니다.";
-            document.getElementById("duplicateError").style.color = "blue";
-            document.getElementById("password").disabled = false;
-            document.getElementById("ip_address").disabled = false;
+  <script>
+    function checkDuplicate() {
+      var username = document.getElementById("username").value;
+      if (username !== "") {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              var response = xhr.responseText;
+              if (response === "duplicate") {
+                document.getElementById("duplicateError").innerText = "이미 사용 중인 아이디입니다.";
+                document.getElementById("duplicateError").style.color = "red";
+                document.getElementById("password").disabled = true;
+                document.getElementById("ip_address").disabled = true;
+                document.getElementById("email").disabled = true;
+              } else {
+                document.getElementById("duplicateError").innerText = "사용 가능한 아이디입니다.";
+                document.getElementById("duplicateError").style.color = "blue";
+                document.getElementById("password").disabled = false;
+                document.getElementById("ip_address").disabled = false;
+                document.getElementById("email").disabled = false;
+              }
+            } else {
+              console.log("Error: " + xhr.status);
+            }
           }
-        } else {
-          console.log("Error: " + xhr.status);
-        }
+        };
+        xhr.open("POST", "check_id.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("username=" + username);
+      } else {
+        document.getElementById("password").disabled = true;
+        document.getElementById("ip_address").disabled = true;
+        document.getElementById("email").disabled = true;
       }
-    };
-    xhr.open("POST", "check_id.php", true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.send("username=" + username);
-  } else {
-    document.getElementById("password").disabled = true;
-    document.getElementById("ip_address").disabled = true;
-  }
-}
+    }
 
-function checkPassword() {
-  var password = document.getElementById("password").value;
-  var ipAddressField = document.getElementById("ip_address");
-  if (password.length < 4) {
-    document.getElementById("passwordError").innerText = "비밀번호는 최소 4자 이상이어야 합니다.";
-    document.getElementById("passwordError").style.color = "red";
-    ipAddressField.disabled = true; // 아이피 주소 필드를 비활성화
-  } else {
-    document.getElementById("passwordError").innerText = "";
-    ipAddressField.disabled = false; // 아이피 주소 필드를 활성화
-  }
-}
-</script>
+    function checkPassword() {
+      var password = document.getElementById("password").value;
+      var ipAddressField = document.getElementById("ip_address");
+      var emailField = document.getElementById("email");
+      if (password.length < 4) {
+        document.getElementById("passwordError").innerText = "비밀번호는 최소 4자 이상이어야 합니다.";
+        document.getElementById("passwordError").style.color = "red";
+        ipAddressField.disabled = true; // 아이피 주소 필드를 비활성화
+        emailField.disabled = true;
+      } else {
+        document.getElementById("passwordError").innerText = "";
+        ipAddressField.disabled = false; // 아이피 주소 필드를 활성화
+        emailField.disabled = false;
+      }
+    }
+  </script>
 </head>
 <body>
-  <div class="registerbody">
-    <h2>회원가입</h2>
-    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-      <label for="username">아이디:</label>
-      <input type="text" id="username" name="username" required>
-      <button type="button" onclick="checkDuplicate()">중복확인</button><br>
-      <span id="duplicateError" class="error"></span><br>
+  <div class="container d-flex align-items-center justify-content-center vh-100">
+    <div class="card p-4">
+      <h2 class="card-title text-center">회원가입</h2>
+      <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+        <div class="form-floating mb-3">
+          <input type="text" id="username" name="username" class="form-control" placeholder="아이디" required>
+          <label for="username">아이디:</label>
+          <button type="button" onclick="checkDuplicate()" class="btn btn-primary">중복확인</button>
+          <br>
+          <span id="duplicateError" class="error"></span>
+        </div>
 
-      <label for="password">비밀번호:</label>
-      <input type="password" id="password" name="password" required onkeyup="checkPassword()"><br>
-      <span id="passwordError" class="error"></span><br>
+        <div class="form-floating mb-3">
+          <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호" required onkeyup="checkPassword()">
+          <label for="password">비밀번호:</label>
+          <span id="passwordError" class="error"></span>
+        </div>
 
-      <label for="ip_address">아이피 주소:</label>
-      <input type="text" id="ip_address" name="ip_address" required><br><br>
+        <div class="form-floating mb-3">
+          <input type="text" id="ip_address" name="ip_address" class="form-control" placeholder="아이피 주소" required>
+          <label for="ip_address">아이피 주소:</label>
+        </div>
 
-      <input type="submit" value="회원가입">
-    </form>
+        <div class="form-floating mb-3">
+          <input type="email" id="email" name="email" class="form-control" placeholder="이메일" required>
+          <label for="email">이메일:</label>
+        </div>
+
+        <div class="text-center">
+          <input type="submit" value="회원가입" class="btn btn-primary">
+        </div>
+      </form>
+    </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
