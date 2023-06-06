@@ -62,7 +62,7 @@ $totalPages = ceil($totalRows / $recordsPerPage);
 
 date_default_timezone_set('Asia/Seoul');
 
-$query = "SELECT * FROM tbl WHERE account = '".$_SESSION["id"]."' ORDER BY id DESC LIMIT 1;";
+$query = "SELECT * FROM tbl WHERE motion = '1' and account = '".$_SESSION["id"]."' ORDER BY id DESC LIMIT 1;";
 $result_recent = mysqli_query($conn, $query);
 if ($row = mysqli_fetch_assoc($result_recent)) {
     $rtTimestamp = strtotime($row['rt']);
@@ -70,7 +70,7 @@ if ($row = mysqli_fetch_assoc($result_recent)) {
     $timeDiff = $currentTimestamp - $rtTimestamp;
 
     if ($timeDiff < 60) {
-        $recentUpdate = '방금 전';
+        $recentUpdate = $timeDiff . '초 전';
     } elseif ($timeDiff < 3600) {
         $recentUpdate = floor($timeDiff / 60) . '분 전';
     } elseif ($timeDiff < 86400) {
