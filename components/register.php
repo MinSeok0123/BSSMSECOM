@@ -56,12 +56,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
+<link rel="stylesheet" href="css/register.css" />
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>회원가입</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
   <style>
     .error {
       color: red;
@@ -122,40 +121,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </script>
 </head>
 <body>
-  <div class="container d-flex align-items-center justify-content-center vh-100">
-    <div class="card p-4">
-      <h2 class="card-title text-center">회원가입</h2>
-      <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <div class="form-floating mb-3">
-          <input type="text" id="username" name="username" class="form-control" placeholder="아이디" required>
-          <label for="username">아이디:</label>
-          <button type="button" onclick="checkDuplicate()" class="btn btn-primary">중복확인</button>
-          <br>
-          <span id="duplicateError" class="error"></span>
+  <div class="registerbody">
+    <div class="registerwrap">
+      <img class="registerlogo" src="img/secom.png" alt="logo">
+      <form class="form" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+        <div class="idwrap">
+          <label class="idlabel" for="username">아이디</label>
+          <input class="id" type="text" id="username" name="username" placeholder="ID" required>
+          <button class="idcheckbtn" type="button" onclick="checkDuplicate()">중복확인</button>
         </div>
 
-        <div class="form-floating mb-3">
-          <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호" required onkeyup="checkPassword()">
-          <label for="password">비밀번호:</label>
-          <span id="passwordError" class="error"></span>
+        <div class="iderror">
+          <span id="duplicateError"></span>
         </div>
 
-        <div class="form-floating mb-3">
-          <input type="text" id="ip_address" name="ip_address" class="form-control" placeholder="아이피 주소" required>
-          <label for="ip_address">아이피 주소:</label>
+        <div class="pwwrap">
+          <label class="pwlabel" for="password">비밀번호</label>
+          <input class="pw" type="password" id="password" name="password" placeholder="PW" required onkeyup="checkPassword()">
         </div>
 
-        <div class="form-floating mb-3">
-          <input type="email" id="email" name="email" class="form-control" placeholder="이메일" required>
-          <label for="email">이메일:</label>
+        <div class="pwerror">
+        <span id="passwordError"></span>
         </div>
 
-        <div class="text-center">
-          <input type="submit" value="회원가입" class="btn btn-primary">
+        <div class="ipwrap">
+          <label class="iplabel" for="ip_address">아이피 주소</label>
+          <input class="ip" type="text" id="ip_address" name="ip_address" placeholder="아이피 주소" required>
+        </div>
+
+        <div class="emailwrap">
+        <label class="emaillabel" for="email">이메일</label>
+          <input class="email" type="email" id="email" name="email" placeholder="이메일" required>
+        </div>
+
+        <div class="회원가입">
+          <input class="registbtn" type="submit" value="회원가입">
         </div>
       </form>
     </div>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
