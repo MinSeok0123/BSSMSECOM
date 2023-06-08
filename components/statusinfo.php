@@ -3,7 +3,7 @@ session_start();
 include 'db.php';
 $conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
 $id = $_SESSION["id"];
-$query = "SELECT * FROM tbl WHERE account = '$id' LIMIT 1;";
+$query = "SELECT * FROM tbl WHERE account = '$id'ORDER BY rt DESC LIMIT 1;";
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($result);
 ?>
@@ -45,6 +45,11 @@ $row = mysqli_fetch_assoc($result);
         </div>
         <div class="graph">
             <span class="tit">Graph</span>
+            <a href="alldata.php">
+            <div class="alldata">
+                <img class="chart" src="img/chart.png" alt="chart">
+            </div>
+            </a>
             <div class="graphwrap">
                 <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%;">
                     <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 60%">
@@ -60,30 +65,34 @@ $row = mysqli_fetch_assoc($result);
 </div>
 
 <script>
-    // Fetch temperature and humidity values from PHP
-    var temperature = "<?php echo $row['temperature']; ?>";
-    var humidity = "<?php echo $row['humidity']; ?>";
+  var initialTemperature = parseInt("<?php echo $row['temperature']; ?>");
+  var initialHumidity = parseInt("<?php echo $row['humidity']; ?>");
 
-    // Function to animate number counting
-    function animateCount(element, targetValue) {
-        var currentValue = 0;
-        var increment = Math.ceil(targetValue / 50); // Adjust the increment value as needed
+  function updateValues() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'update_status.php', true);
 
-        var interval = setInterval(function() {
-            currentValue += increment;
-            if (currentValue >= targetValue) {
-                currentValue = targetValue;
-                clearInterval(interval);
-            }
-            element.innerHTML = currentValue;
-        }, 50); // Adjust the interval time as needed
-    }
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        var updatedTemperature = parseInt(response.temperature);
+        var updatedHumidity = parseInt(response.humidity);
 
-    // Animate temperature count
-    var temperatureElement = document.getElementById("temperature");
-    animateCount(temperatureElement, temperature);
+        temperatureElement.innerHTML = updatedTemperature;
 
-    // Animate humidity count
-    var humidityElement = document.getElementById("humidity");
-    animateCount(humidityElement, humidity);
+        humidityElement.innerHTML = updatedHumidity;
+      }
+    };
+
+    xhr.send();
+  }
+  var temperatureElement = document.getElementById("temperature");
+  temperatureElement.innerHTML = initialTemperature;
+
+  var humidityElement = document.getElementById("humidity");
+  humidityElement.innerHTML = initialHumidity;
+
+  updateValues();
+
+  setInterval(updateValues, 1000);
 </script>

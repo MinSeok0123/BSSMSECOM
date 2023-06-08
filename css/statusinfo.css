@@ -65,6 +65,23 @@
   font-weight: bold;
 }
 
+.alldata {
+  position: absolute;
+  right: 30px;
+  top: 20px;
+  width: 35px;
+  height: 35px;
+  background-color: black;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart {
+  width: 50%;
+}
+
 .top {
   display: flex;
   justify-content: center;
