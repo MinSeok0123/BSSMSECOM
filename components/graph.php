@@ -25,9 +25,9 @@ $result = mysqli_query($conn, $query);
         <?php
         while ($row = mysqli_fetch_assoc($result)) {
             $formattedTime = date("g시 i분 s초", strtotime($row['rt']));
-            echo "temperatureData.push(" . $row['temperature'] . ");";
-            echo "humidityData.push(" . $row['humidity'] . ");";
-            echo "timeData.push('" . $formattedTime . "');";
+            echo "temperatureData.unshift(" . $row['temperature'] . ");";
+            echo "humidityData.unshift(" . $row['humidity'] . ");";
+            echo "timeData.unshift('" . $formattedTime . "');";
         }
         ?>
 
@@ -77,6 +77,10 @@ $result = mysqli_query($conn, $query);
                 url: 'graph_update.php',
                 success: function(data) {
                     var newData = JSON.parse(data);
+                    
+                    newData.temperatureData.reverse();
+                    newData.humidityData.reverse();
+                    newData.timeData.reverse();
                     
                     chart.data.datasets[0].data = newData.temperatureData;
                     chart.data.datasets[1].data = newData.humidityData;

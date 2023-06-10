@@ -13,7 +13,7 @@ $row = mysqli_fetch_assoc($result);
 <head>
     <title>온도 및 습도 도넛 차트</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 </head>
 <body>
 <div style="width:85%; justify-content: space-between; align-items: center; display:flex;">
@@ -41,7 +41,7 @@ $row = mysqli_fetch_assoc($result);
 
 <script>
 $(document).ready(function() {
-    setInterval(refreshData, 1000);
+    setInterval(refreshData, 1000); 
 
     function refreshData() {
         $.ajax({
