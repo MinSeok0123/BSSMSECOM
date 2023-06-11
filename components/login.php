@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $checkResult = $conn->query($checkSql);
       if ($checkResult->num_rows == 0) {
         // Insert data into the "time" table
-        $insertSql = "INSERT INTO time (id, start, end) VALUES ('" . $_SESSION["id"] . "', '07:30', '20:30')";
+        $insertSql = "INSERT INTO time (id, start, end) VALUES ('" . $_SESSION["id"] . "', '07:30', '20:40')";
         if ($conn->query($insertSql) === TRUE) {
           header("Location: main.php"); // 로그인 성공 시 이동할 페이지
           exit();
@@ -62,6 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     .error {
       color: red;
     }
+    
   </style>
 </head>
 <body>
