@@ -1,6 +1,6 @@
 <?php
 include 'db.php';
-$conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
+$conn = mysqli_connect($db_host, $db_id, $db_pw, $db_name);
 
 session_start();
 $sessionId = $_SESSION["id"];

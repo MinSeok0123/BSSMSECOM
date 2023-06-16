@@ -2,7 +2,7 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // 데이터베이스 연결
   include 'db.php';
-  $servername = 'localhost';
+  $servername = $db_host;
   $username = $db_id;
   $password = $db_pw;
   $dbname = $db_name;

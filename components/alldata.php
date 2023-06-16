@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'db.php';
-$conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
+$conn = mysqli_connect($db_host, $db_id, $db_pw, $db_name);
 $id = $_SESSION["id"];
 
 $order = isset($_GET['order']) ? $_GET['order'] : '';
@@ -28,6 +28,13 @@ $total_rows = count($rows);
 $total_pages = ceil($total_rows / $per_page);
 $start = ($page - 1) * $per_page;
 $paginated_rows = array_slice($rows, $start, $per_page);
+if (isset($_POST['delete_all'])) {
+    $delete_query = "DELETE FROM tbl WHERE account = '$id'";
+    mysqli_query($conn, $delete_query);
+
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -130,6 +137,19 @@ $paginated_rows = array_slice($rows, $start, $per_page);
             <button type="submit" name="order" value="desc">내림차순 정렬</button>
         </form>
     </div>
+    <div>
+        <form method="post" onsubmit="return confirm('정말로 모든 데이터를 삭제하시겠습니까?');">
+            <input type="hidden" name="search" value="<?php echo $search; ?>">
+            <button type="submit" name="delete_all">전체 삭제</button>
+        </form>
+    </div>
 </div>
+
+<script>
+    function confirmDeletion() {
+        return confirm("정말로 모든 데이터를 삭제하시겠습니까?");
+    }
+</script>
+
 </body>
 </html>

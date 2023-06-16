@@ -2,7 +2,7 @@
 session_start();
 include 'db.php';
 
-$conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
+$conn = mysqli_connect($db_host, $db_id, $db_pw, $db_name);
 
 $query = "SELECT * FROM time WHERE id = '".$_SESSION["id"]."' LIMIT 1;";
 $result_time = mysqli_query($conn, $query);

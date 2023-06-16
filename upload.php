@@ -10,7 +10,7 @@ $date = date("Y-m-d H:i:s");
 $click = '0';
 
 // MySQL에 접속
-$conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
+$conn = mysqli_connect($db_host, $db_id, $db_pw, $db_name);
 
 // users 테이블에서 IP 주소와 동일한 ID 값을 가져옴
 $query = "SELECT id FROM users WHERE ip_address = '$did'";

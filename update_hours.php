@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'db.php';
-$conn = mysqli_connect('localhost', $db_id, $db_pw, $db_name);
+$conn = mysqli_connect($db_host, $db_id, $db_pw, $db_name);
 
 if (isset($_POST['start']) && isset($_POST['end'])) {
     $startTime = $_POST['start'];
